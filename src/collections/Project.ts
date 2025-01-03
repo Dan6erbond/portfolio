@@ -15,6 +15,10 @@ export const Project: CollectionConfig = {
       type: 'textarea',
     },
     {
+      name: 'order',
+      type: 'number',
+    },
+    {
       name: 'link',
       type: 'text',
     },
@@ -25,6 +29,7 @@ export const Project: CollectionConfig = {
         {
           name: 'tag',
           type: 'text',
+          required: true,
         },
       ],
     },

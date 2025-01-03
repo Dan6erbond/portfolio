@@ -19,6 +19,10 @@ export const Experience: CollectionConfig = {
       type: 'text',
     },
     {
+      name: 'company',
+      type: 'text',
+    },
+    {
       name: 'description',
       type: 'textarea',
     },
@@ -33,6 +37,7 @@ export const Experience: CollectionConfig = {
         {
           name: 'tag',
           type: 'text',
+          required: true,
         },
       ],
     },

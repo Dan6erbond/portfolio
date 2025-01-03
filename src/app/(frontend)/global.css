@@ -7,6 +7,8 @@
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
+    --tag: 0 0% 100%;
+    --tag-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
     --primary: 240 5.9% 10%;
@@ -34,6 +36,8 @@
     --foreground: 0 0% 98%;
     --card: 245, 30%, 8%;
     --card-foreground: 0 0% 98%;
+    --tag: 236, 25%, 13%;
+    --tag-foreground: 222, 13%, 76%;
     --popover: 245, 30%, 8%;
     --popover-foreground: 0 0% 98%;
     --primary: 0 0% 98%;

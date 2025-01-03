@@ -4,7 +4,6 @@ import { Media } from './collections/Media'
 import { Project } from './collections/Project'
 import { Users } from './collections/Users'
 import { buildConfig } from 'payload'
-import { docsReorder } from '@payload-enchants/docs-reorder'
 import { fileURLToPath } from 'url'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
@@ -38,9 +37,6 @@ export default buildConfig({
   sharp,
   plugins: [
     payloadCloudPlugin({}),
-    docsReorder({
-      collections: [{ slug: 'projects' }],
-    }),
     // storage-adapter-placeholder
   ],
 })

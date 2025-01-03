@@ -6,7 +6,7 @@ dependencies:
     version: 10.2.0(react@19.0.0)
   '@payload-enchants/docs-reorder':
     specifier: ^1.2.2
-    version: 1.2.2(@payloadcms/ui@3.9.0)(@types/react-dom@19.0.1)(@types/react@19.0.1)(payload@3.9.0)(react-dom@19.0.0)(react@19.0.0)
+    version: 1.2.2(@payloadcms/ui@3.14.0)(@types/react-dom@19.0.1)(@types/react@19.0.1)(payload@3.9.0)(react-dom@19.0.0)(react@19.0.0)
   '@payloadcms/db-postgres':
     specifier: 3.9.0
     version: 3.9.0(@types/react@19.0.1)(payload@3.9.0)(react@19.0.0)
@@ -19,6 +19,9 @@ dependencies:
   '@payloadcms/richtext-lexical':
     specifier: 3.9.0
     version: 3.9.0(@faceless-ui/modal@3.0.0-beta.2)(@faceless-ui/scroll-info@2.0.0-beta.0)(@lexical/headless@0.20.0)(@lexical/html@0.20.0)(@lexical/link@0.20.0)(@lexical/list@0.20.0)(@lexical/mark@0.20.0)(@lexical/react@0.20.0)(@lexical/rich-text@0.20.0)(@lexical/selection@0.20.0)(@lexical/table@0.20.0)(@lexical/utils@0.20.0)(@payloadcms/next@3.9.0)(@types/react@19.0.1)(lexical@0.20.0)(monaco-editor@0.52.2)(next@15.1.0)(payload@3.9.0)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2)
+  '@payloadcms/ui':
+    specifier: ^3.14.0
+    version: 3.14.0(@types/react@19.0.1)(monaco-editor@0.52.2)(next@15.1.0)(payload@3.9.0)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2)
   '@radix-ui/react-popover':
     specifier: ^1.1.4
     version: 1.1.4(@types/react-dom@19.0.1)(@types/react@19.0.1)(react-dom@19.0.0)(react@19.0.0)
@@ -31,6 +34,9 @@ dependencies:
   cross-env:
     specifier: ^7.0.3
     version: 7.0.3
+  dayjs:
+    specifier: ^1.11.13
+    version: 1.11.13
   graphql:
     specifier: ^16.8.1
     version: 16.8.1
@@ -2485,13 +2491,13 @@ packages:
     resolution: {integrity: sha512-XuySG1E38YScSJoMlqovLru4KTUNSjgVTIjyh7qMX6aNN5HY5Ct5LhRJdxO79JtTzKfzV/bnWpz+zquYrISsvw==}
     dev: false
 
-  /@payload-enchants/docs-reorder@1.2.2(@payloadcms/ui@3.9.0)(@types/react-dom@19.0.1)(@types/react@19.0.1)(payload@3.9.0)(react-dom@19.0.0)(react@19.0.0):
+  /@payload-enchants/docs-reorder@1.2.2(@payloadcms/ui@3.14.0)(@types/react-dom@19.0.1)(@types/react@19.0.1)(payload@3.9.0)(react-dom@19.0.0)(react@19.0.0):
     resolution: {integrity: sha512-BtBA7j08KkUc7ocVo19xFIsTjwjrLuC/1m7458PRQrZY8CtdMZsi2Y/GBYs2u14g8HkELHaNSe3mgP7wdYZ5zA==}
     peerDependencies:
       '@payloadcms/ui': ^3.0.0-beta.61
       payload: ^3.0.0-beta.61
     dependencies:
-      '@payloadcms/ui': 3.9.0(@types/react@19.0.1)(monaco-editor@0.52.2)(next@15.1.0)(payload@3.9.0)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2)
+      '@payloadcms/ui': 3.14.0(@types/react@19.0.1)(monaco-editor@0.52.2)(next@15.1.0)(payload@3.9.0)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2)
       '@radix-ui/react-dialog': 1.1.4(@types/react-dom@19.0.1)(@types/react@19.0.1)(react-dom@19.0.0)(react@19.0.0)
       clsx: 2.1.1
       payload: 3.9.0(graphql@16.8.1)(monaco-editor@0.52.2)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2)
@@ -2736,10 +2742,58 @@ packages:
       - typescript
     dev: false
 
+  /@payloadcms/translations@3.14.0:
+    resolution: {integrity: sha512-rkjpJubbqpZKYSXZn/mW65oO5wykjRsflfwGutXwukorQJBQG1DlhZ83yb0rJtkeHUXnWaUMs3WFNZ2InUBw7g==}
+    dependencies:
+      date-fns: 4.1.0
+    dev: false
+
   /@payloadcms/translations@3.9.0:
     resolution: {integrity: sha512-GN8tHKksO1s+jGA9GCWTdY1JDXV4PMl/RjPTrxjT+EhDRtk75OPm3nIdbBeBs/NlmpLYrISbjiRvV1fXjDBILA==}
     dependencies:
       date-fns: 4.1.0
+    dev: false
+
+  /@payloadcms/ui@3.14.0(@types/react@19.0.1)(monaco-editor@0.52.2)(next@15.1.0)(payload@3.9.0)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2):
+    resolution: {integrity: sha512-mWENSRkm64F5Z9UtbeLpu3LbtTx4C3zuOZTmD9shGO73K9nq6XkcpDl17VU1rOLic1g84dq4V5nPmvNMHYSK4w==}
+    engines: {node: ^18.20.2 || >=20.9.0}
+    peerDependencies:
+      next: ^15.0.0
+      payload: 3.14.0
+      react: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
+      react-dom: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
+    dependencies:
+      '@dnd-kit/core': 6.0.8(react-dom@19.0.0)(react@19.0.0)
+      '@dnd-kit/sortable': 7.0.2(@dnd-kit/core@6.0.8)(react@19.0.0)
+      '@faceless-ui/modal': 3.0.0-beta.2(react-dom@19.0.0)(react@19.0.0)
+      '@faceless-ui/scroll-info': 2.0.0-beta.0(react-dom@19.0.0)(react@19.0.0)
+      '@faceless-ui/window-info': 3.0.0-beta.0(react-dom@19.0.0)(react@19.0.0)
+      '@monaco-editor/react': 4.6.0(monaco-editor@0.52.2)(react-dom@19.0.0)(react@19.0.0)
+      '@payloadcms/translations': 3.14.0
+      body-scroll-lock: 4.0.0-beta.0
+      bson-objectid: 2.0.4
+      date-fns: 4.1.0
+      dequal: 2.0.3
+      md5: 2.3.0
+      next: 15.1.0(react-dom@19.0.0)(react@19.0.0)
+      object-to-formdata: 4.5.1
+      payload: 3.9.0(graphql@16.8.1)(monaco-editor@0.52.2)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2)
+      qs-esm: 7.0.2
+      react: 19.0.0
+      react-datepicker: 7.5.0(react-dom@19.0.0)(react@19.0.0)
+      react-dom: 19.0.0(react@19.0.0)
+      react-image-crop: 10.1.8(react@19.0.0)
+      react-select: 5.9.0(@types/react@19.0.1)(react-dom@19.0.0)(react@19.0.0)
+      scheduler: 0.25.0
+      sonner: 1.7.1(react-dom@19.0.0)(react@19.0.0)
+      ts-essentials: 10.0.3(typescript@5.7.2)
+      use-context-selector: 2.0.0(react@19.0.0)(scheduler@0.25.0)
+      uuid: 10.0.0
+    transitivePeerDependencies:
+      - '@types/react'
+      - monaco-editor
+      - supports-color
+      - typescript
     dev: false
 
   /@payloadcms/ui@3.9.0(@types/react@19.0.1)(monaco-editor@0.52.2)(next@15.1.0)(payload@3.9.0)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2):
@@ -4580,6 +4634,10 @@ packages:
 
   /dateformat@4.6.3:
     resolution: {integrity: sha512-2P0p0pFGzHS5EMnhdxQi7aJN+iMheud0UhG4dlE1DLAlvL8JHjJJTX/CSm4JXwV0Ka5nGk3zC5mcb5bUQUxxMA==}
+    dev: false
+
+  /dayjs@1.11.13:
+    resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
     dev: false
 
   /debug@3.2.7:

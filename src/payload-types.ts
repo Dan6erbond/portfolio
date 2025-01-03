@@ -110,11 +110,12 @@ export interface Experience {
   start?: string | null;
   end?: string | null;
   title?: string | null;
+  company?: string | null;
   description?: string | null;
   link?: string | null;
   tags?:
     | {
-        tag?: string | null;
+        tag: string;
         id?: string | null;
       }[]
     | null;
@@ -127,14 +128,13 @@ export interface Experience {
  */
 export interface Project {
   id: number;
-  start?: string | null;
-  end?: string | null;
   title?: string | null;
   description?: string | null;
+  order?: number | null;
   link?: string | null;
   tags?:
     | {
-        tag?: string | null;
+        tag: string;
         id?: string | null;
       }[]
     | null;
@@ -247,6 +247,7 @@ export interface ExperiencesSelect<T extends boolean = true> {
   start?: T;
   end?: T;
   title?: T;
+  company?: T;
   description?: T;
   link?: T;
   tags?:
@@ -263,10 +264,9 @@ export interface ExperiencesSelect<T extends boolean = true> {
  * via the `definition` "projects_select".
  */
 export interface ProjectsSelect<T extends boolean = true> {
-  start?: T;
-  end?: T;
   title?: T;
   description?: T;
+  order?: T;
   link?: T;
   tags?:
     | T

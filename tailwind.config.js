@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 /** @type {import('tailwindcss').Config} */
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   darkMode: ['class'],
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
@@ -15,6 +17,10 @@ export default {
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
+        },
+        tag: {
+          DEFAULT: 'hsl(var(--tag))',
+          foreground: 'hsl(var(--tag-foreground))',
         },
         popover: {
           DEFAULT: 'hsl(var(--popover))',

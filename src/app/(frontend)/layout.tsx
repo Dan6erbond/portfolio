@@ -5,6 +5,10 @@ import LogoGrid from './logo-grid'
 import Navbar from './navbar'
 import { ReactNode } from 'react'
 import { cn } from '../../lib/utils'
+import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+
+dayjs.extend(localizedFormat)
 
 function Layout({ children }: { children: ReactNode }) {
   return (
