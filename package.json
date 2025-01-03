@@ -15,6 +15,8 @@
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start"
   },
   "dependencies": {
+    "@icons-pack/react-simple-icons": "^10.2.0",
+    "@payload-enchants/docs-reorder": "^1.2.2",
     "@payloadcms/db-postgres": "3.9.0",
     "@payloadcms/next": "3.9.0",
     "@payloadcms/payload-cloud": "3.9.0",
