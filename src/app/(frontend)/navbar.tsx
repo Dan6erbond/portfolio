@@ -18,14 +18,15 @@ async function Navbar() {
           'items-center',
           'gap-4',
           'bg-background/75',
-          'absolute',
+          'fixed',
           'top-0',
           'left-0',
           'h-[64px]',
           'w-full',
           'z-50',
           'backdrop-blur-sm',
-          'p-2',
+          'py-2',
+          'px-4',
           'shadow',
         )}
       >
