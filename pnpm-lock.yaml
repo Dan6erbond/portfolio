@@ -43,6 +43,9 @@ dependencies:
   '@tabler/icons-react':
     specifier: ^3.26.0
     version: 3.26.0(react@19.0.0)
+  babel-plugin-react-compiler:
+    specifier: 19.0.0-beta-55955c9-20241229
+    version: 19.0.0-beta-55955c9-20241229
   class-variance-authority:
     specifier: ^0.7.1
     version: 0.7.1
@@ -66,7 +69,7 @@ dependencies:
     version: 11.15.0(react-dom@19.0.0)(react@19.0.0)
   next:
     specifier: 15.1.1-canary.25
-    version: 15.1.1-canary.25(react-dom@19.0.0)(react@19.0.0)
+    version: 15.1.1-canary.25(babel-plugin-react-compiler@19.0.0-beta-55955c9-20241229)(react-dom@19.0.0)(react@19.0.0)
   react:
     specifier: 19.0.0
     version: 19.0.0
@@ -2659,7 +2662,7 @@ packages:
       graphql-http: 1.22.3(graphql@16.8.1)
       graphql-playground-html: 1.6.30
       http-status: 1.6.2
-      next: 15.1.1-canary.25(react-dom@19.0.0)(react@19.0.0)
+      next: 15.1.1-canary.25(babel-plugin-react-compiler@19.0.0-beta-55955c9-20241229)(react-dom@19.0.0)(react@19.0.0)
       path-to-regexp: 6.3.0
       payload: 3.14.0(graphql@16.8.1)(monaco-editor@0.52.2)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2)
       qs-esm: 7.0.2
@@ -2805,7 +2808,7 @@ packages:
       date-fns: 4.1.0
       dequal: 2.0.3
       md5: 2.3.0
-      next: 15.1.1-canary.25(react-dom@19.0.0)(react@19.0.0)
+      next: 15.1.1-canary.25(babel-plugin-react-compiler@19.0.0-beta-55955c9-20241229)(react-dom@19.0.0)(react@19.0.0)
       object-to-formdata: 4.5.1
       payload: 3.14.0(graphql@16.8.1)(monaco-editor@0.52.2)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2)
       qs-esm: 7.0.2
@@ -4387,6 +4390,12 @@ packages:
       '@babel/runtime': 7.26.0
       cosmiconfig: 7.1.0
       resolve: 1.22.10
+    dev: false
+
+  /babel-plugin-react-compiler@19.0.0-beta-55955c9-20241229:
+    resolution: {integrity: sha512-APpa9fRiG5UN5kxnB/vznaSBKbXwAWZs6QshN3MLntzWa4cUhOxzUSd7Ohmr5sLQaM0ZHjjOg07pw1ZoR7+Oog==}
+    dependencies:
+      '@babel/types': 7.26.3
     dev: false
 
   /balanced-match@1.0.2:
@@ -7159,7 +7168,7 @@ packages:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
     dev: true
 
-  /next@15.1.1-canary.25(react-dom@19.0.0)(react@19.0.0):
+  /next@15.1.1-canary.25(babel-plugin-react-compiler@19.0.0-beta-55955c9-20241229)(react-dom@19.0.0)(react@19.0.0):
     resolution: {integrity: sha512-IqFvb90B7Gf0AeUY+waJzdaoc64AyPiH12ddCM9Z5dpDvlArYEta1/GGN99C9EkzggmJNn6CSslw0B0vxjGJzA==}
     engines: {node: ^18.18.0 || ^19.8.0 || >= 20.0.0}
     hasBin: true
@@ -7183,6 +7192,7 @@ packages:
       '@next/env': 15.1.1-canary.25
       '@swc/counter': 0.1.3
       '@swc/helpers': 0.5.15
+      babel-plugin-react-compiler: 19.0.0-beta-55955c9-20241229
       busboy: 1.6.0
       caniuse-lite: 1.0.30001690
       postcss: 8.4.31
