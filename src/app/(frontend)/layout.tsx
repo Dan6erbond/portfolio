@@ -29,18 +29,7 @@ async function Layout({ children }: { children: ReactNode }) {
         <Navbar contactPromise={contactPromise} />
         <main className={cn('min-h-[100vh]', 'p-4', 'relative')}>
           <LogoGrid />
-          <Suspense
-            fallback={
-              <>
-                <Skeleton className={cn('h-6', 'w-64', 'mb-4')} />
-                <Skeleton className={cn('h-6', 'w-64', 'mb-4')} />
-                <Skeleton className={cn('h-6', 'w-80', 'mb-4')} />
-                <Skeleton className={cn('h-6', 'w-80', 'mb-4')} />
-              </>
-            }
-          >
-            {children}
-          </Suspense>
+          {children}
         </main>
         <Footer />
       </body>
