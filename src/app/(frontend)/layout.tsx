@@ -1,12 +1,10 @@
 import './global.css'
 
-import { ReactNode, Suspense } from 'react'
-
 import Footer from './footer'
 import LogoGrid from './logo-grid'
 import { Metadata } from 'next'
 import Navbar from './navbar'
-import { Skeleton } from '../../components/ui/skeleton'
+import { ReactNode } from 'react'
 import { cn } from '../../lib/utils'
 import dayjs from 'dayjs'
 import { getPayload } from '../../api/payload'
