@@ -1,6 +1,7 @@
 import { SiGitea, SiGithub, SiLinkedin, SiReddit } from '@icons-pack/react-simple-icons'
 
 import { GlobalConfig } from 'payload'
+import { revalidateTag } from 'next/cache'
 
 export const linkTypes = {
   linkedin: {
@@ -25,6 +26,13 @@ export const Contact: GlobalConfig = {
   slug: 'contact',
   access: {
     read: () => true,
+  },
+  hooks: {
+    afterChange: [
+      ({}) => {
+        revalidateTag('contact')
+      },
+    ],
   },
   fields: [
     { name: 'about', type: 'richText' },

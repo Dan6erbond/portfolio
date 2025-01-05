@@ -6,33 +6,62 @@ import React from 'react'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { Tag } from '../../components/ui/tag'
 import { Timeline } from '../../components/ui/timeline'
+import { unstable_cacheTag as cacheTag } from 'next/cache'
 import { cn } from '../../lib/utils'
 import dayjs from 'dayjs'
 import { getPayload } from '../../api/payload'
 
-async function Home() {
-  const contact = await (await getPayload()).findGlobal({ slug: 'contact' })
-  const experiences = await (
+async function getLatestExperiences() {
+  'use cache'
+  cacheTag('experiences')
+
+  return await (
     await getPayload()
   ).find({
     collection: 'experiences',
     limit: 5,
     sort: ['-start', '-end'],
   })
-  const projects = await (
+}
+
+async function getContact() {
+  'use cache'
+  cacheTag('contact')
+
+  return await (await getPayload()).findGlobal({ slug: 'contact' })
+}
+
+async function getLatestProjects() {
+  'use cache'
+  cacheTag('projects')
+
+  return await (
     await getPayload()
   ).find({
     collection: 'projects',
     limit: 5,
     sort: 'order',
   })
-  const blogPosts = await (
+}
+
+async function getLatestBlogPosts() {
+  'use cache'
+  cacheTag('blog-posts')
+
+  return await (
     await getPayload()
   ).find({
     collection: 'blog-posts',
     limit: 5,
     sort: '-createdAt',
   })
+}
+
+async function Home() {
+  const experiences = await getLatestExperiences()
+  const contact = await getContact()
+  const projects = await getLatestProjects()
+  const blogPosts = await getLatestBlogPosts()
 
   return (
     <div className={cn('container', 'mx-auto', 'flex', 'flex-col', 'gap-24')}>
