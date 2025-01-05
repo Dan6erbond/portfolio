@@ -24,6 +24,13 @@ type NavbarProps = {
   contactPromise: Promise<Contact>
 }
 
+const navbarLinks = [
+  {
+    path: '/blog',
+    name: 'Blog',
+  },
+]
+
 function Navbar({ contactPromise }: NavbarProps) {
   const [open, setOpen] = useState(false)
   const contact = use(contactPromise)
@@ -60,9 +67,11 @@ function Navbar({ contactPromise }: NavbarProps) {
           </DrawerTrigger>
         </div>
         <div className={cn('items-center', 'gap-4', 'hidden', 'md:flex', 'justify-center')}>
-          <Link href="/projects">Projects</Link>
-          <Link href="/blog">Blog</Link>
-          <Link href="/about">About Me</Link>
+          {navbarLinks.map((nl) => (
+            <Link key={nl.path} href={nl.path}>
+              {nl.name}
+            </Link>
+          ))}
         </div>
         <div className={cn('flex', 'justify-end')}>
           <Popover>
@@ -123,9 +132,11 @@ function Navbar({ contactPromise }: NavbarProps) {
           </Link>
         </DrawerHeader>
         <div className={cn('flex', 'flex-col', 'items-center', 'gap-4')}>
-          <Link href="/projects">Projects</Link>
-          <Link href="/blog">Blog</Link>
-          <Link href="/about">About Me</Link>
+          {navbarLinks.map((nl) => (
+            <Link key={nl.path} href={nl.path}>
+              {nl.name}
+            </Link>
+          ))}
         </div>
       </DrawerContent>
     </Drawer>
