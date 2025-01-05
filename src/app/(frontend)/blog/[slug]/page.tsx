@@ -7,15 +7,15 @@ import {
   BreadcrumbSeparator,
 } from '../../../../components/ui/breadcrumb'
 
+import { Metadata } from 'next'
+import { unstable_cacheTag as cacheTag } from 'next/cache'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import { getPayload } from '../../../../api/payload'
 import RichText from '../../../../components/ui/rich-text'
 import ScrollProgress from '../../../../components/ui/scroll-progress'
 import { Tag } from '../../../../components/ui/tag'
-import { unstable_cacheTag as cacheTag } from 'next/cache'
 import { cn } from '../../../../lib/utils'
-import { getPayload } from '../../../../api/payload'
-import { notFound } from 'next/navigation'
-import { Metadata } from 'next'
 
 async function getBlogPost(slug: string) {
   'use cache'
@@ -42,9 +42,13 @@ async function getBlogPost(slug: string) {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const blogPost = await getBlogPost((await params).slug)
 
+  if (!blogPost) {
+    notFound()
+  }
+
   return {
-    title: blogPost?.title,
-    description: blogPost?.summary,
+    title: blogPost.title,
+    description: blogPost.summary,
   } satisfies Metadata
 }
 
