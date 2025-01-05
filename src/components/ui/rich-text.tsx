@@ -11,7 +11,14 @@ export default function RichText({
 }: Omit<ComponentProps<typeof PayloadRichText>, 'converters'>) {
   return (
     <PayloadRichText
-      className={cn('prose', 'prose-stone', 'lg:prose-xl', 'dark:prose-invert', className)}
+      className={cn(
+        'prose',
+        'prose-stone',
+        'max-w-full',
+        'lg:prose-xl',
+        'dark:prose-invert',
+        className,
+      )}
       converters={({ defaultConverters }) => ({
         ...defaultConverters,
         blocks: {
