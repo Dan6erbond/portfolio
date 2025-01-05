@@ -1,10 +1,12 @@
 import './global.css'
 
+import { ReactNode, Suspense } from 'react'
+
 import Footer from './footer'
 import LogoGrid from './logo-grid'
 import { Metadata } from 'next'
 import Navbar from './navbar'
-import { ReactNode } from 'react'
+import { Skeleton } from '../../components/ui/skeleton'
 import { cn } from '../../lib/utils'
 import dayjs from 'dayjs'
 import { getPayload } from '../../api/payload'
@@ -27,7 +29,18 @@ async function Layout({ children }: { children: ReactNode }) {
         <Navbar contactPromise={contactPromise} />
         <main className={cn('min-h-[100vh]', 'p-4', 'relative')}>
           <LogoGrid />
-          {children}
+          <Suspense
+            fallback={
+              <>
+                <Skeleton className={cn('h-6', 'w-64', 'mb-4')} />
+                <Skeleton className={cn('h-6', 'w-64', 'mb-4')} />
+                <Skeleton className={cn('h-6', 'w-80', 'mb-4')} />
+                <Skeleton className={cn('h-6', 'w-80', 'mb-4')} />
+              </>
+            }
+          >
+            {children}
+          </Suspense>
         </main>
         <Footer />
       </body>
