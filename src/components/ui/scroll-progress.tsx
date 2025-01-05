@@ -1,31 +1,31 @@
-"use client";
+'use client'
 
-import { motion, useScroll, useSpring } from "motion/react";
+import { motion, useScroll, useSpring } from 'motion/react'
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils'
 
 interface ScrollProgressProps {
-  className?: string;
+  className?: string
 }
 
 export default function ScrollProgress({ className }: ScrollProgressProps) {
-  const { scrollYProgress } = useScroll();
+  const { scrollYProgress } = useScroll()
 
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 200,
     damping: 50,
     restDelta: 0.001,
-  });
+  })
 
   return (
     <motion.div
       className={cn(
-        "fixed inset-x-0 top-0 z-[1000] h-1 origin-left bg-gradient-to-r from-slate-900 via-pink-950 to-rose-950",
+        'fixed inset-x-0 top-0 z-[1000] h-1 origin-left bg-gradient-to-r from-slate-900 via-pink-950 to-rose-950',
         className,
       )}
       style={{
         scaleX,
       }}
     />
-  );
+  )
 }
