@@ -1,0 +1,43 @@
+import { Block, Field } from 'payload'
+
+import { SyntaxHighlighter } from '../components/ui/syntax-highlighter'
+
+export const codeFields: Field[] = [
+  {
+    type: 'select',
+    name: 'language',
+    options: SyntaxHighlighter.supportedLanguages,
+    defaultValue: 'typescript',
+  },
+  {
+    admin: {
+      components: {
+        Field: '../components/ui/code-block#CodeBlockField',
+      },
+    },
+    name: 'code',
+    type: 'code',
+  },
+]
+
+export const Code: Block = {
+  slug: 'Code',
+  fields: codeFields,
+}
+
+export const CodeTabs: Block = {
+  slug: 'CodeTabs',
+  fields: [
+    {
+      name: 'files',
+      type: 'array',
+      fields: [
+        {
+          type: 'text',
+          name: 'filename',
+        },
+        ...codeFields,
+      ],
+    },
+  ],
+}

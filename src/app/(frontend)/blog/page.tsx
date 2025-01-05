@@ -1,0 +1,118 @@
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '../../../components/ui/pagination'
+
+import { Input } from '../../../components/ui/input'
+import Link from 'next/link'
+import React from 'react'
+import { Separator } from '../../../components/ui/separator'
+import { Tag } from '../../../components/ui/tag'
+import { blog_posts_tags } from '../../../payload-generated-schema'
+import { cn } from '../../../lib/utils'
+import { getPayload } from '../../../api/payload'
+
+export default async function Blog({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const tags = await (await getPayload()).db.drizzle
+    .selectDistinct({ tag: blog_posts_tags.tag })
+    .from(blog_posts_tags)
+
+  const sp = await searchParams
+
+  const searchTags = sp.tags
+    ? Array.isArray(sp.tags)
+      ? sp.tags.reduce((tags, param) => [...tags, ...param.split(',')], new Array<string>())
+      : sp.tags.split(',')
+    : []
+
+  const page = sp.page ? (Array.isArray(sp.page) ? parseInt(sp.page[0]) : parseInt(sp.page)) : 1
+
+  const blogPosts = await (
+    await getPayload()
+  ).find({
+    collection: 'blog-posts',
+    limit: 5,
+    sort: '-createdAt',
+    where: {
+      'tags.tag': {
+        in: searchTags,
+      },
+    },
+    page,
+  })
+
+  return (
+    <div className={cn('container', 'mx-auto', 'flex', 'flex-col', 'gap-4')}>
+      <h1 className={cn('text-5xl', 'text-center')}>Blog</h1>
+      <p className={cn('text-2xl', 'text-center')}>View my latest blog posts</p>
+      <Input className={cn('max-w-6xl', 'self-center')} placeholder="Search" />
+      <div
+        className={cn('flex', 'gap-2', 'justify-center', 'flex-wrap', 'max-w-6xl', 'self-center')}
+      >
+        {tags.map(({ tag }) => (
+          <Tag key={tag} asChild>
+            <Link
+              href={`?${new URLSearchParams({ ...sp, tags: [...searchTags, tag].join(',') }).toString()}`}
+            >
+              {tag}
+            </Link>
+          </Tag>
+        ))}
+      </div>
+      <div className={cn('flex', 'flex-col', 'gap-4')}>
+        {blogPosts.docs.map((bp, idx) => (
+          <>
+            <Link key={bp.id} href={`/blog/${bp.slug}`} className={cn('flex', 'flex-col', 'gap-2')}>
+              <h3 className={cn('text-xl', 'flex', 'gap-2', 'items-center')}>{bp.title}</h3>
+              <p>{bp.summary}</p>
+              {bp.tags && (
+                <div className={cn('flex', 'gap-2', 'flex-wrap', 'items-center')}>
+                  {bp.tags.map(({ tag }) => (
+                    <Tag key={tag} asChild>
+                      <Link href={`/blog?${new URLSearchParams({ tags: tag }).toString()}`}>
+                        {tag}
+                      </Link>
+                    </Tag>
+                  ))}
+                </div>
+              )}
+            </Link>
+            {idx < blogPosts.docs.length && <Separator />}
+          </>
+        ))}
+      </div>
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              href={`?${new URLSearchParams({ ...sp, page: Math.max(page - 1, 1).toString() }).toString()}`}
+            />
+          </PaginationItem>
+          {new Array(blogPosts.totalPages).fill(null).map((_, idx) => (
+            <PaginationItem key={idx + 1}>
+              <PaginationLink
+                href={`?${new URLSearchParams({ ...sp, page: (idx + 1).toString() }).toString()}`}
+              >
+                {idx + 1}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+          <PaginationItem>
+            <PaginationNext
+              href={`?${new URLSearchParams({ ...sp, page: Math.min(page + 1, blogPosts.totalPages).toString() }).toString()}`}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    </div>
+  )
+}
