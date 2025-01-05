@@ -1,13 +1,10 @@
 'use client'
 
-import { CodeField, useFormFields } from '@payloadcms/ui'
-import type { CodeFieldClient, CodeFieldClientProps } from 'payload'
 import { IconCheck, IconCopy } from '@tabler/icons-react'
 
 import React from 'react'
 import { SyntaxHighlighter } from './syntax-highlighter'
 import { coldarkDark } from 'react-syntax-highlighter/dist/cjs/styles/prism'
-import { useMemo } from 'react'
 
 type CodeBlockProps = {
   filename: string
@@ -114,52 +111,5 @@ export const CodeBlock = ({
         {String(activeCode)}
       </SyntaxHighlighter>
     </div>
-  )
-}
-
-export const CodeBlockField: React.FC<CodeFieldClientProps> = ({
-  autoComplete,
-  field,
-  forceRender,
-  path,
-  permissions,
-  readOnly,
-  renderedBlocks,
-  schemaPath,
-  validate,
-}) => {
-  const languageField = useFormFields(([fields]) => fields[path.replace('code', 'language')])
-
-  const language: string =
-    (languageField?.value as string) || (languageField.initialValue as string) || 'typescript'
-
-  const props: CodeFieldClient = useMemo<CodeFieldClient>(
-    () => ({
-      ...field,
-      type: 'code',
-      admin: {
-        ...field.admin,
-        language: language,
-        editorOptions: field.admin?.editorOptions,
-      },
-    }),
-    [field, language],
-  )
-
-  const key = `${field.name}-${language}`
-
-  return (
-    <CodeField
-      autoComplete={autoComplete}
-      field={props}
-      forceRender={forceRender}
-      key={key}
-      path={path}
-      permissions={permissions}
-      readOnly={readOnly}
-      renderedBlocks={renderedBlocks}
-      schemaPath={schemaPath}
-      validate={validate}
-    />
   )
 }
