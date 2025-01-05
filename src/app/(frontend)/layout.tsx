@@ -14,6 +14,8 @@ dayjs.extend(localizedFormat)
 
 export const metadata: Metadata = {
   title: 'RaviAnand Mohabir',
+  description:
+    'CTO and software developer specializing in scalable web applications, CRMs, and client-focused solutions. Driving innovation at InnoPeak, a leading FinSure startup.',
 }
 
 async function Layout({ children }: { children: ReactNode }) {
