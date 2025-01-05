@@ -1,7 +1,6 @@
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -10,12 +9,14 @@ import {
 
 import { Input } from '../../../components/ui/input'
 import Link from 'next/link'
-import React from 'react'
+import { Metadata } from 'next'
 import { Separator } from '../../../components/ui/separator'
 import { Tag } from '../../../components/ui/tag'
 import { blog_posts_tags } from '../../../payload-generated-schema'
 import { cn } from '../../../lib/utils'
 import { getPayload } from '../../../api/payload'
+
+export const metadata: Metadata = { title: 'Blog', description: 'Read my latest blog posts' }
 
 export default async function Blog({
   searchParams,
@@ -70,9 +71,9 @@ export default async function Blog({
     <div className={cn('container', 'mx-auto', 'flex', 'flex-col', 'gap-4')}>
       <h1 className={cn('text-5xl', 'text-center')}>Blog</h1>
       <p className={cn('text-2xl', 'text-center')}>View my latest blog posts</p>
-      <form method="get">
+      <form method="get" className={cn('flex', 'justify-center')}>
         <Input
-          className={cn('max-w-6xl', 'self-center')}
+          className={cn('max-w-6xl')}
           placeholder="Search"
           id="query"
           name="q"
