@@ -11,6 +11,7 @@ import { CodeBlock } from '../../../../components/ui/code-block'
 import Link from 'next/link'
 import React from 'react'
 import RichText from '../../../../components/ui/rich-text'
+import ScrollProgress from '../../../../components/ui/scroll-progress'
 import { Tag } from '../../../../components/ui/tag'
 import { cn } from '../../../../lib/utils'
 import { getPayload } from '../../../../api/payload'
@@ -36,6 +37,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
 
   return (
     <div className={cn('container', 'mx-auto', 'flex', 'flex-col', 'gap-4')}>
+      <ScrollProgress className="top-[65px]" />
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
