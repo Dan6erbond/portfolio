@@ -5,6 +5,7 @@ import LogoGrid from './logo-grid'
 import { Metadata } from 'next'
 import Navbar from './navbar'
 import { ReactNode } from 'react'
+import { unstable_cacheTag as cacheTag } from 'next/cache'
 import { cn } from '../../lib/utils'
 import dayjs from 'dayjs'
 import { getPayload } from '../../api/payload'
@@ -18,8 +19,15 @@ export const metadata: Metadata = {
     'CTO and software developer specializing in scalable web applications, CRMs, and client-focused solutions. Driving innovation at InnoPeak, a leading FinSure startup.',
 }
 
-async function Layout({ children }: { children: ReactNode }) {
-  const contactPromise = (await getPayload()).findGlobal({ slug: 'contact' })
+async function getContact() {
+  'use cache'
+  cacheTag('contact')
+
+  return await (await getPayload()).findGlobal({ slug: 'contact' })
+}
+
+export default async function Layout({ children }: { children: ReactNode }) {
+  const contactPromise = getContact()
 
   return (
     <html className={cn('dark')}>
@@ -34,5 +42,3 @@ async function Layout({ children }: { children: ReactNode }) {
     </html>
   )
 }
-
-export default Layout
