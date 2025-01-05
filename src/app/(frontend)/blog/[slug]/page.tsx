@@ -7,33 +7,53 @@ import {
   BreadcrumbSeparator,
 } from '../../../../components/ui/breadcrumb'
 
-import { CodeBlock } from '../../../../components/ui/code-block'
 import Link from 'next/link'
-import React from 'react'
 import RichText from '../../../../components/ui/rich-text'
 import ScrollProgress from '../../../../components/ui/scroll-progress'
 import { Tag } from '../../../../components/ui/tag'
+import { unstable_cacheTag as cacheTag } from 'next/cache'
 import { cn } from '../../../../lib/utils'
 import { getPayload } from '../../../../api/payload'
 import { notFound } from 'next/navigation'
+import { Metadata } from 'next'
 
-export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
+async function getBlogPost(slug: string) {
+  'use cache'
+  cacheTag(slug)
+
   const blogPosts = await (
     await getPayload()
   ).find({
     collection: 'blog-posts',
     where: {
       slug: {
-        equals: (await params).slug,
+        equals: slug,
       },
     },
   })
 
   if (blogPosts.docs.length === 0) {
-    notFound()
+    return null
   }
 
-  const blogPost = blogPosts.docs[0]
+  return blogPosts.docs[0]
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const blogPost = await getBlogPost((await params).slug)
+
+  return {
+    title: blogPost?.title,
+    description: blogPost?.summary,
+  } satisfies Metadata
+}
+
+export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
+  const blogPost = await getBlogPost((await params).slug)
+
+  if (!blogPost) {
+    notFound()
+  }
 
   return (
     <div className={cn('container', 'mx-auto', 'flex', 'flex-col', 'gap-4')}>
@@ -61,4 +81,17 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
       {blogPost.text && <RichText data={blogPost.text} />}
     </div>
   )
+}
+
+export async function generateStaticParams() {
+  const blogPosts = await (
+    await getPayload()
+  ).find({
+    collection: 'blog-posts',
+    pagination: false,
+  })
+
+  return blogPosts.docs.map((bp) => ({
+    slug: bp.slug,
+  }))
 }

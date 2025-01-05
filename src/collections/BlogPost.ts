@@ -1,4 +1,5 @@
 import { CollectionConfig } from 'payload'
+import { revalidateTag } from 'next/cache'
 import slugify from 'slugify'
 
 export const BlogPost: CollectionConfig = {
@@ -10,6 +11,20 @@ export const BlogPost: CollectionConfig = {
     drafts: {
       validate: true,
     },
+  },
+  hooks: {
+    afterChange: [
+      ({ doc }) => {
+        revalidateTag('blog-posts')
+        revalidateTag(doc.slug)
+      },
+    ],
+    afterDelete: [
+      ({ doc }) => {
+        revalidateTag('blog-posts')
+        revalidateTag(doc.slug)
+      },
+    ],
   },
   fields: [
     {
