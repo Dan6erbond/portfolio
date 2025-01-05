@@ -9,7 +9,7 @@ import {
   DrawerTrigger,
 } from '../../components/ui/drawer'
 import { Popover, PopoverContent } from '../../components/ui/popover'
-import { use, useState } from 'react'
+import { Suspense, use, useState } from 'react'
 
 import { Button } from '../../components/ui/button'
 import { Contact } from '../../payload-types'
@@ -17,6 +17,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Menu } from 'lucide-react'
 import { PopoverTrigger } from '@radix-ui/react-popover'
+import { Skeleton } from '../../components/ui/skeleton'
 import { cn } from '../../lib/utils'
 import { linkTypes } from '../../globals/Contact'
 
@@ -33,7 +34,6 @@ const navbarLinks = [
 
 function Navbar({ contactPromise }: NavbarProps) {
   const [open, setOpen] = useState(false)
-  const contact = use(contactPromise)
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
@@ -101,23 +101,26 @@ function Navbar({ contactPromise }: NavbarProps) {
               </button>
             </PopoverTrigger>
             <PopoverContent>
-              <div className={cn('flex', 'flex-col', 'gap-2')}>
-                {contact.links?.map((l) => {
-                  const Icon = linkTypes[l.type].icon
-
-                  return (
-                    <a
-                      href={l.url ?? ''}
-                      target="_blank"
-                      className={cn('flex', 'gap-2', 'items-center')}
-                      key={l.id}
-                    >
-                      <Icon />
-                      <p>{linkTypes[l.type].label}</p>
-                    </a>
-                  )
-                })}
-              </div>
+              <Suspense
+                fallback={
+                  <div className={cn('flex', 'flex-col', 'gap-2')}>
+                    <div className={cn('flex', 'gap-2')}>
+                      <Skeleton className="w-6 h-6 rounded-full" />
+                      <Skeleton className="flex-grow h-6 rounded-full" />
+                    </div>
+                    <div className={cn('flex', 'gap-2')}>
+                      <Skeleton className="w-6 h-6 rounded-full" />
+                      <Skeleton className="flex-grow h-6 rounded-full" />
+                    </div>
+                    <div className={cn('flex', 'gap-2')}>
+                      <Skeleton className="w-6 h-6 rounded-full" />
+                      <Skeleton className="flex-grow h-6 rounded-full" />
+                    </div>
+                  </div>
+                }
+              >
+                <GetInTouch contactPromise={contactPromise} />
+              </Suspense>
             </PopoverContent>
           </Popover>
         </div>
@@ -140,6 +143,34 @@ function Navbar({ contactPromise }: NavbarProps) {
         </div>
       </DrawerContent>
     </Drawer>
+  )
+}
+
+type GetInTouchProps = {
+  contactPromise: Promise<Contact>
+}
+
+function GetInTouch({ contactPromise }: GetInTouchProps) {
+  const contact = use(contactPromise)
+
+  return (
+    <div className={cn('flex', 'flex-col', 'gap-2')}>
+      {contact.links?.map((l) => {
+        const Icon = linkTypes[l.type].icon
+
+        return (
+          <a
+            href={l.url ?? ''}
+            target="_blank"
+            className={cn('flex', 'gap-2', 'items-center')}
+            key={l.id}
+          >
+            <Icon />
+            <p>{linkTypes[l.type].label}</p>
+          </a>
+        )
+      })}
+    </div>
   )
 }
 
