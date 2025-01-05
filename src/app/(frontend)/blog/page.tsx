@@ -34,6 +34,8 @@ export default async function Blog({
       : sp.tags.split(',')
     : []
 
+  const query = Array.isArray(sp.q) ? sp.q[0] : sp.q
+
   const page = sp.page ? (Array.isArray(sp.page) ? parseInt(sp.page[0]) : parseInt(sp.page)) : 1
 
   const blogPosts = await (
@@ -46,6 +48,20 @@ export default async function Blog({
       'tags.tag': {
         in: searchTags,
       },
+      or: query
+        ? [
+            {
+              title: {
+                like: query,
+              },
+            },
+            {
+              summary: {
+                like: query,
+              },
+            },
+          ]
+        : [],
     },
     page,
   })
@@ -54,7 +70,15 @@ export default async function Blog({
     <div className={cn('container', 'mx-auto', 'flex', 'flex-col', 'gap-4')}>
       <h1 className={cn('text-5xl', 'text-center')}>Blog</h1>
       <p className={cn('text-2xl', 'text-center')}>View my latest blog posts</p>
-      <Input className={cn('max-w-6xl', 'self-center')} placeholder="Search" />
+      <form method="get">
+        <Input
+          className={cn('max-w-6xl', 'self-center')}
+          placeholder="Search"
+          id="query"
+          name="q"
+          defaultValue={query}
+        />
+      </form>
       <div
         className={cn('flex', 'gap-2', 'justify-center', 'flex-wrap', 'max-w-6xl', 'self-center')}
       >
@@ -71,9 +95,15 @@ export default async function Blog({
       <div className={cn('flex', 'flex-col', 'gap-4')}>
         {blogPosts.docs.map((bp, idx) => (
           <>
-            <Link key={bp.id} href={`/blog/${bp.slug}`} className={cn('flex', 'flex-col', 'gap-2')}>
-              <h3 className={cn('text-xl', 'flex', 'gap-2', 'items-center')}>{bp.title}</h3>
-              <p>{bp.summary}</p>
+            <div key={bp.id} className={cn('flex', 'flex-col', 'gap-2')}>
+              <Link
+                key={bp.id}
+                href={`/blog/${bp.slug}`}
+                className={cn('flex', 'flex-col', 'gap-2')}
+              >
+                <h3 className={cn('text-xl', 'flex', 'gap-2', 'items-center')}>{bp.title}</h3>
+                <p>{bp.summary}</p>
+              </Link>
               {bp.tags && (
                 <div className={cn('flex', 'gap-2', 'flex-wrap', 'items-center')}>
                   {bp.tags.map(({ tag }) => (
@@ -85,7 +115,7 @@ export default async function Blog({
                   ))}
                 </div>
               )}
-            </Link>
+            </div>
             {idx < blogPosts.docs.length && <Separator />}
           </>
         ))}
