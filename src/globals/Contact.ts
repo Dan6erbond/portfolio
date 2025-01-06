@@ -35,7 +35,6 @@ export const Contact: GlobalConfig = {
     ],
   },
   fields: [
-    { name: 'about', type: 'richText' },
     {
       name: 'links',
       type: 'array',

@@ -22,11 +22,11 @@ async function getLatestExperiences() {
   })
 }
 
-async function getContact() {
+async function getAbout() {
   'use cache'
-  cacheTag('contact')
+  cacheTag('about')
 
-  return await (await getPayload()).findGlobal({ slug: 'contact' })
+  return await (await getPayload()).findGlobal({ slug: 'about' })
 }
 
 async function getLatestProjects() {
@@ -57,7 +57,7 @@ async function getLatestBlogPosts() {
 
 async function Home() {
   const experiences = getLatestExperiences()
-  const contact = await getContact()
+  const about = await getAbout()
   const projects = await getLatestProjects()
   const blogPosts = await getLatestBlogPosts()
 
@@ -67,11 +67,8 @@ async function Home() {
         <p className={cn('text-6xl')}>Hello</p>
         <p className={cn('text-2xl')}>I&apos;m RaviAnand Mohabir.</p>
         <p className={cn('text-lg')}>Software Engineer based in Switzerland</p>
-        {contact.about && (
-          <RichText
-            data={contact.about}
-            className={cn('prose', 'md:prose-md', 'dark:prose-invert')}
-          />
+        {about.text && (
+          <RichText data={about.text} className={cn('prose', 'md:prose-md', 'dark:prose-invert')} />
         )}
       </section>
       <section className={cn('max-w-2xl')}>

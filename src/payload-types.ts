@@ -35,9 +35,11 @@ export interface Config {
     defaultIDType: number;
   };
   globals: {
+    about: About;
     contact: Contact;
   };
   globalsSelect: {
+    about: AboutSelect<false> | AboutSelect<true>;
     contact: ContactSelect<false> | ContactSelect<true>;
   };
   locale: null;
@@ -370,11 +372,12 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "contact".
+ * via the `definition` "about".
  */
-export interface Contact {
+export interface About {
   id: number;
-  about?: {
+  summary?: string | null;
+  text?: {
     root: {
       type: string;
       children: {
@@ -389,6 +392,15 @@ export interface Contact {
     };
     [k: string]: unknown;
   } | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact".
+ */
+export interface Contact {
+  id: number;
   links?:
     | {
         type: 'linkedin' | 'reddit' | 'gitea' | 'github';
@@ -401,10 +413,20 @@ export interface Contact {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about_select".
+ */
+export interface AboutSelect<T extends boolean = true> {
+  summary?: T;
+  text?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contact_select".
  */
 export interface ContactSelect<T extends boolean = true> {
-  about?: T;
   links?:
     | T
     | {

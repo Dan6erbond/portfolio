@@ -1,6 +1,7 @@
 import { BlocksFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { Code, CodeTabs } from './blocks/Code'
 
+import { About } from './globals/About'
 import { BlogPost } from './collections/BlogPost'
 import { Contact } from './globals/Contact'
 import { Experience } from './collections/Experience'
@@ -25,7 +26,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  globals: [Contact],
+  globals: [About, Contact],
   collections: [Users, Media, Experience, Project, BlogPost],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
