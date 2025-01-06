@@ -1,10 +1,10 @@
 import './global.css'
 
+import { Metadata, Viewport } from 'next'
+
 import DayJs from './dayjs'
 import Footer from './footer'
-import Head from 'next/head'
 import LogoGrid from './logo-grid'
-import { Metadata } from 'next'
 import Navbar from './navbar'
 import { ReactNode } from 'react'
 import { unstable_cacheTag as cacheTag } from 'next/cache'
@@ -16,6 +16,11 @@ async function getAbout() {
   cacheTag('about')
 
   return await (await getPayload()).findGlobal({ slug: 'about' })
+}
+
+export const viewport: Viewport = {
+  themeColor: 'zinc',
+  colorScheme: 'dark',
 }
 
 export async function generateMetadata(): Promise<Metadata> {
