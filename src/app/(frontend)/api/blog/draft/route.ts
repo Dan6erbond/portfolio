@@ -16,6 +16,7 @@ async function getBlogPost(slug: string) {
         equals: slug,
       },
     },
+    draft: true,
   })
 
   if (blogPosts.docs.length === 0) {
