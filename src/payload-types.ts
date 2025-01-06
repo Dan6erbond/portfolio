@@ -152,7 +152,7 @@ export interface Project {
 export interface BlogPost {
   id: number;
   title?: string | null;
-  slug?: string | null;
+  slug: string;
   summary?: string | null;
   text?: {
     root: {

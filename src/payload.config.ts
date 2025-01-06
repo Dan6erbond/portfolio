@@ -25,6 +25,33 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    livePreview: {
+      collections: ['blog-posts'],
+      url: ({ data, collectionConfig, req }) =>
+        collectionConfig?.slug === 'blog-posts'
+          ? `${req.protocol}//${req.host}/api/blog/draft?secret=${process.env.DRAFT_MODE_SECRET}&slug=${data.slug}`
+          : '',
+      breakpoints: [
+        {
+          label: 'Mobile',
+          name: 'mobile',
+          width: 640,
+          height: 1490,
+        },
+        {
+          label: 'Tablet',
+          name: 'tablet',
+          width: 768,
+          height: 576,
+        },
+        {
+          label: 'Laptop',
+          name: 'laptop',
+          width: 1024,
+          height: 1640,
+        },
+      ],
+    },
   },
   globals: [About, Contact],
   collections: [Users, Media, Experience, Project, BlogPost],
@@ -45,6 +72,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.POSTGRES_URL || '',
     },
+    push: false,
   }),
   sharp,
   plugins: [

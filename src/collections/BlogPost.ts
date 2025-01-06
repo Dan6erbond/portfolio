@@ -35,6 +35,7 @@ export const BlogPost: CollectionConfig = {
       name: 'slug',
       type: 'text',
       unique: true,
+      required: true,
       admin: {
         readOnly: true,
       },

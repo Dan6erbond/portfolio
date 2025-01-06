@@ -19,6 +19,7 @@
     "@icons-pack/react-simple-icons": "^10.2.0",
     "@payload-enchants/docs-reorder": "^1.2.2",
     "@payloadcms/db-postgres": "3.14.0",
+    "@payloadcms/live-preview-react": "^3.14.0",
     "@payloadcms/next": "3.14.0",
     "@payloadcms/payload-cloud": "3.14.0",
     "@payloadcms/richtext-lexical": "3.14.0",

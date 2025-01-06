@@ -8,7 +8,7 @@ import {
 } from '../../../../components/ui/breadcrumb'
 
 import { Metadata } from 'next'
-import { unstable_cacheTag as cacheTag } from 'next/cache'
+import { unstable_cacheTag as cacheTag, unstable_cacheLife as cacheLife } from 'next/cache'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPayload } from '../../../../api/payload'
@@ -16,10 +16,16 @@ import RichText from '../../../../components/ui/rich-text'
 import ScrollProgress from '../../../../components/ui/scroll-progress'
 import { Tag } from '../../../../components/ui/tag'
 import { cn } from '../../../../lib/utils'
+import { draftMode } from 'next/headers'
+import { RefreshRouteOnSave } from './refresh'
 
-async function getBlogPost(slug: string) {
+async function getBlogPost(slug: string, draft?: boolean) {
   'use cache'
   cacheTag(slug)
+
+  if (draft) {
+    cacheLife('seconds')
+  }
 
   const blogPosts = await (
     await getPayload()
@@ -30,6 +36,7 @@ async function getBlogPost(slug: string) {
         equals: slug,
       },
     },
+    draft,
   })
 
   if (blogPosts.docs.length === 0) {
@@ -53,7 +60,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
-  const blogPost = await getBlogPost((await params).slug)
+  const { isEnabled } = await draftMode()
+
+  const blogPost = await getBlogPost((await params).slug, isEnabled)
 
   if (!blogPost) {
     notFound()
@@ -62,6 +71,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
   return (
     <div className={cn('container', 'mx-auto', 'flex', 'flex-col', 'gap-4')}>
       <ScrollProgress className="top-[65px]" />
+      <RefreshRouteOnSave />
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
