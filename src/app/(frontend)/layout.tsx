@@ -39,22 +39,6 @@ export default async function Layout({ children }: { children: ReactNode }) {
 
   return (
     <html className={cn('dark')}>
-      <Head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link
-          rel="icon"
-          href="/favicon-96x96?<generated>"
-          type="image/<generated>"
-          sizes="<generated>"
-        />
-        <link
-          rel="apple-touch-icon"
-          href="/apple-touch-icon?<generated>"
-          type="image/<generated>"
-          sizes="<generated>"
-        />
-        <meta name="apple-mobile-web-app-title" content="RaviAnand Mohabir" />
-      </Head>
       <DayJs />
       <body>
         <Navbar contactPromise={contactPromise} />
