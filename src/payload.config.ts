@@ -27,9 +27,9 @@ export default buildConfig({
     },
     livePreview: {
       collections: ['blog-posts'],
-      url: ({ data, collectionConfig, req }) =>
+      url: ({ data, collectionConfig }) =>
         collectionConfig?.slug === 'blog-posts'
-          ? `${req.protocol}//${req.host}/api/blog/draft?secret=${process.env.DRAFT_MODE_SECRET}&slug=${data.slug}`
+          ? `${process.env.NEXT_PUBLIC_PAYLOAD_URL}/api/blog/draft?secret=${process.env.DRAFT_MODE_SECRET}&slug=${data.slug}`
           : '',
       breakpoints: [
         {
