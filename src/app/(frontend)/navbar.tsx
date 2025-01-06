@@ -56,7 +56,7 @@ function Navbar({ contactPromise }: NavbarProps) {
           'shadow',
         )}
       >
-        <div>
+        <div className={cn('flex', 'items-center')}>
           <Link href="/" className={cn('mr-4', 'hidden', 'md:block')}>
             <Image width={20} height={30} src="/logo.png" alt="RaviAnand Mohabir" />
           </Link>
