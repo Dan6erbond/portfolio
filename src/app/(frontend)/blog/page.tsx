@@ -55,6 +55,13 @@ async function getBlogPosts({
             },
           ]
         : [],
+      and: [
+        {
+          _status: {
+            equals: 'published',
+          },
+        },
+      ],
     },
     page,
   })
