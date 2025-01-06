@@ -7,6 +7,7 @@ import Footer from './footer'
 import LogoGrid from './logo-grid'
 import Navbar from './navbar'
 import { ReactNode } from 'react'
+import Script from 'next/script'
 import { unstable_cacheTag as cacheTag } from 'next/cache'
 import { cn } from '../../lib/utils'
 import { getPayload } from '../../api/payload'
@@ -44,6 +45,9 @@ export default async function Layout({ children }: { children: ReactNode }) {
 
   return (
     <html className={cn('dark')}>
+      {process.env.UMAMI_WEBSITE_ID && (
+        <Script defer src={process.env.UMAMI_JS} data-website-id={process.env.UMAMI_WEBSITE_ID} />
+      )}
       <DayJs />
       <body>
         <Navbar contactPromise={contactPromise} />
