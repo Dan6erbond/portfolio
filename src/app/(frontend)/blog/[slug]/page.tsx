@@ -47,7 +47,9 @@ async function getBlogPost(slug: string, draft?: boolean) {
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const blogPost = await getBlogPost((await params).slug)
+  const { isEnabled } = await draftMode()
+
+  const blogPost = await getBlogPost((await params).slug, isEnabled)
 
   if (!blogPost) {
     notFound()
