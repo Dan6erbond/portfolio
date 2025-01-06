@@ -52,6 +52,11 @@ async function getLatestBlogPosts() {
     collection: 'blog-posts',
     limit: 5,
     sort: '-createdAt',
+    where: {
+      _status: {
+        equals: 'published',
+      },
+    },
   })
 }
 
