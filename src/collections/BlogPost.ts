@@ -44,11 +44,8 @@ export const BlogPost: CollectionConfig = {
       },
       hooks: {
         beforeChange: [
-          ({ siblingData, operation, value }) => {
-            if (operation === 'create') {
-              return slugify(siblingData.title, { lower: true, strict: true })
-            }
-            return value
+          ({ siblingData }) => {
+            return slugify(siblingData.title, { lower: true, strict: true })
           },
         ],
       },
