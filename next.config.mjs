@@ -4,9 +4,7 @@ import { withPayload } from '@payloadcms/next/withPayload'
 const nextConfig = {
   experimental: {
     dynamicIO: true,
-    reactCompiler: {
-      compilationMode: 'annotation',
-    },
+    reactCompiler: false,
   },
 }
 
