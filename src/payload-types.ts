@@ -403,7 +403,7 @@ export interface Contact {
   id: number;
   links?:
     | {
-        type: 'linkedin' | 'reddit' | 'gitea' | 'github';
+        type: 'linkedin' | 'reddit' | 'gitea' | 'github' | 'email';
         url?: string | null;
         id?: string | null;
       }[]

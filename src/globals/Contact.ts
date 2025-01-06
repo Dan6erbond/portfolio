@@ -1,6 +1,7 @@
 import { SiGitea, SiGithub, SiLinkedin, SiReddit } from '@icons-pack/react-simple-icons'
 
 import { GlobalConfig } from 'payload'
+import { Mail } from 'lucide-react'
 import { revalidateTag } from 'next/cache'
 
 export const linkTypes = {
@@ -19,6 +20,10 @@ export const linkTypes = {
   github: {
     label: 'GitHub',
     icon: SiGithub,
+  },
+  email: {
+    label: 'Email',
+    icon: Mail,
   },
 } as const
 
