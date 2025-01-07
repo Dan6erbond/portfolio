@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer
       className={cn(
-        'h-[80px]',
+        'p-8',
         'shadow',
         'bg-slate-950',
         'bg-gradient-to-r',
@@ -14,6 +14,8 @@ export default function Footer() {
         'from-70%',
         'to-rose-950',
         'flex',
+        'flex-col',
+        'gap-2',
         'items-center',
         'justify-center',
         'mt-8',
@@ -24,6 +26,7 @@ export default function Footer() {
         <Dot />
         <span>RaviAnand Mohabir, 2025</span>
       </div>
+      <p className={cn('text-slate-400')}>Design by Sushmita Mohabir</p>
     </footer>
   )
 }
