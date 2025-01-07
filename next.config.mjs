@@ -7,7 +7,7 @@ const nextConfig = {
     reactCompiler: false,
   },
   outputFileTracingIncludes: {
-    '/blog/[slug]/opengraph-image': ['./logo.png'],
+    '/blog/\\[slug\\]/opengraph-image': ['./logo.png'],
   },
 }
 
