@@ -6,6 +6,9 @@ const nextConfig = {
     dynamicIO: true,
     reactCompiler: false,
   },
+  outputFileTracingIncludes: {
+    '/blog/[slug]/opengraph-image': ['./logo.png'],
+  },
 }
 
 export default withPayload(nextConfig)
