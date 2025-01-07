@@ -18,6 +18,10 @@ export const codeFields: Field[] = [
     name: 'code',
     type: 'code',
   },
+  {
+    type: 'text',
+    name: 'highlightLines',
+  },
 ]
 
 export const Code: Block = {

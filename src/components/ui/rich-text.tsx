@@ -5,6 +5,26 @@ import { ComponentProps } from 'react'
 import { RichText as PayloadRichText } from '@payloadcms/richtext-lexical/react'
 import { cn } from '../../lib/utils'
 
+function parseHighlightLines(hl?: string) {
+  if (!hl) {
+    return undefined
+  }
+
+  const hls = hl.split(',')
+
+  return hls.reduce((lines, hl) => {
+    const [f, t] = hl.split('-')
+    const from = parseInt(f)
+
+    if (t) {
+      const to = parseInt(t)
+      return [...lines, ...new Array(to - from + 1).fill(null).map((_, idx) => idx + from)]
+    }
+
+    return [...lines, from]
+  }, new Array<number>())
+}
+
 export default function RichText({
   className,
   ...props
@@ -28,6 +48,7 @@ export default function RichText({
                 filename={node.fields.blockName}
                 language={(node.fields as any).language}
                 code={(node.fields as any).code}
+                highlightLines={parseHighlightLines((node.fields as any).highlightLines)}
               />
             )
           },
@@ -39,6 +60,7 @@ export default function RichText({
                   name: f.filename,
                   code: f.code,
                   language: f.language,
+                  highlightLines: parseHighlightLines(f.highlightLines),
                 }))}
               />
             )
