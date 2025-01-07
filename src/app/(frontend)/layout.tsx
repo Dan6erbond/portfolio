@@ -4,6 +4,7 @@ import { Metadata, Viewport } from 'next'
 
 import DayJs from './dayjs'
 import Footer from './footer'
+import { Inter } from 'next/font/google'
 import LogoGrid from './logo-grid'
 import Navbar from './navbar'
 import { ReactNode } from 'react'
@@ -11,6 +12,12 @@ import Script from 'next/script'
 import { unstable_cacheTag as cacheTag } from 'next/cache'
 import { cn } from '../../lib/utils'
 import { getPayload } from '../../api/payload'
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+})
 
 async function getAbout() {
   'use cache'
@@ -44,7 +51,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
   const contactPromise = getContact()
 
   return (
-    <html className={cn('dark')}>
+    <html lang="en" className={cn('dark', inter.variable)}>
       {process.env.UMAMI_WEBSITE_ID && (
         <Script defer src={process.env.UMAMI_JS} data-website-id={process.env.UMAMI_WEBSITE_ID} />
       )}
