@@ -8,7 +8,8 @@ import {
 } from '../../../../components/ui/breadcrumb'
 
 import { Metadata } from 'next'
-import { unstable_cacheTag as cacheTag, unstable_cacheLife as cacheLife } from 'next/cache'
+import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from 'next/cache'
+import { draftMode } from 'next/headers'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPayload } from '../../../../api/payload'
@@ -16,8 +17,8 @@ import RichText from '../../../../components/ui/rich-text'
 import ScrollProgress from '../../../../components/ui/scroll-progress'
 import { Tag } from '../../../../components/ui/tag'
 import { cn } from '../../../../lib/utils'
-import { draftMode } from 'next/headers'
 import { RefreshRouteOnSave } from './refresh'
+import Stats from './stats'
 
 async function getBlogPost(slug: string, draft?: boolean) {
   'use cache'
@@ -86,7 +87,8 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         </BreadcrumbList>
       </Breadcrumb>
       <h1 className={cn('text-5xl')}>{blogPost.title}</h1>
-      <p className={cn('text-xl')}>{blogPost.summary}</p>
+      <p className={cn('text-lg')}>{blogPost.summary}</p>
+      <Stats text={blogPost.text} />
       <div className={cn('flex', 'gap-2', 'flex-wrap', 'max-w-6xl')}>
         {blogPost.tags?.map(({ tag }) => (
           <Tag key={tag} asChild>

@@ -2,9 +2,21 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { ImageResponse } from 'next/og'
+import { Timer } from 'lucide-react'
 import { cn } from '../../../../lib/utils'
+import dayjs from 'dayjs'
+import duration from 'dayjs/plugin/duration'
+import { join } from 'node:path'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+import { readFile } from 'node:fs/promises'
+import readingTime from 'reading-time'
+import relativeTime from 'dayjs/plugin/relativeTime'
 
-export const runtime = 'edge'
+dayjs.extend(localizedFormat)
+dayjs.extend(relativeTime)
+dayjs.extend(duration)
+
+export const runtime = 'nodejs'
 
 // Image metadata
 export const alt = 'About Acme'
@@ -27,17 +39,47 @@ async function getBlogPost(slug: string) {
   return blogPosts.docs[0]
 }
 
+function appendText(
+  text: string,
+  children?: {
+    type: string
+    version: number
+    [key: string]: unknown
+  }[],
+) {
+  if (!children) return text
+
+  for (const child of children) {
+    if (child.text) {
+      text += ' ' + child.text
+    }
+    text = appendText(
+      text,
+      child.children as {
+        type: string
+        version: number
+        [key: string]: unknown
+      }[],
+    )
+  }
+
+  return text
+}
+
 // Image generation
 export default async function OGImage({ params }: { params: Promise<{ slug: string }> }) {
-  const logoSrc = await fetch(new URL('./logo.png', import.meta.url)).then((res) =>
-    res.arrayBuffer(),
-  )
+  const logoData = await readFile(join(process.cwd(), 'logo.png'))
+  const logoSrc = Uint8Array.from(logoData).buffer
 
   const blogPost = await getBlogPost((await params).slug)
 
   const logoCount = 5
   const width = 1200 / logoCount
   const height = (1043 / 456) * width
+
+  const fullText = appendText('', blogPost.text?.root.children)
+  const stats = readingTime(fullText)
+  const minutes = dayjs.duration(stats.minutes, 'minutes').humanize()
 
   return new ImageResponse(
     (
@@ -120,6 +162,10 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
           >
             {blogPost?.title}
           </h1>
+          <div tw={cn('flex', 'gap-2', 'text-slate-400')}>
+            <Timer />
+            <p>{minutes}</p>
+          </div>
         </div>
       </div>
     ),
