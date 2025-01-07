@@ -2,10 +2,10 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { ImageResponse } from 'next/og'
-import { Timer } from 'lucide-react'
 import { cn } from '../../../../lib/utils'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
+import { getPayload } from '../../../../api/payload'
 import { join } from 'node:path'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { readFile } from 'node:fs/promises'
@@ -28,9 +28,16 @@ export const size = {
 export const contentType = 'image/png'
 
 async function getBlogPost(slug: string) {
-  const blogPosts = await fetch(
-    new URL(`/api/blog-posts?where[slug][equals]=${slug}`, process.env.NEXT_PUBLIC_PAYLOAD_URL),
-  ).then((resp) => resp.json())
+  const blogPosts = await (
+    await getPayload()
+  ).find({
+    collection: 'blog-posts',
+    where: {
+      slug: {
+        equals: slug,
+      },
+    },
+  })
 
   if (blogPosts.docs.length === 0) {
     return null
@@ -77,7 +84,7 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
   const width = 1200 / logoCount
   const height = (1043 / 456) * width
 
-  const fullText = appendText('', blogPost.text?.root.children)
+  const fullText = appendText('', blogPost?.text?.root.children)
   const stats = readingTime(fullText)
   const minutes = dayjs.duration(stats.minutes, 'minutes').humanize()
 
@@ -162,9 +169,23 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
           >
             {blogPost?.title}
           </h1>
-          <div tw={cn('flex', 'gap-2', 'text-slate-400')}>
-            <Timer />
-            <p>{minutes}</p>
+          <div tw={cn('flex', 'items-center', 'text-slate-400')}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="10" x2="14" y1="2" y2="2" />
+              <line x1="12" x2="15" y1="14" y2="11" />
+              <circle cx="12" cy="14" r="8" />
+            </svg>
+            <p tw={cn('ml-2')}>{minutes}</p>
           </div>
         </div>
       </div>
@@ -176,4 +197,17 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
       ...size,
     },
   )
+}
+
+export async function generateStaticParams() {
+  const blogPosts = await (
+    await getPayload()
+  ).find({
+    collection: 'blog-posts',
+    pagination: false,
+  })
+
+  return blogPosts.docs.map((bp) => ({
+    slug: bp.slug,
+  }))
 }
