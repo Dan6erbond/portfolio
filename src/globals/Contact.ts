@@ -1,4 +1,4 @@
-import { SiGitea, SiGithub, SiLinkedin, SiReddit } from '@icons-pack/react-simple-icons'
+import { SiBluesky, SiGitea, SiGithub, SiLinkedin, SiReddit } from '@icons-pack/react-simple-icons'
 
 import { GlobalConfig } from 'payload'
 import { Mail } from 'lucide-react'
@@ -24,6 +24,10 @@ export const linkTypes = {
   email: {
     label: 'Email',
     icon: Mail,
+  },
+  bluesky: {
+    label: 'Bluesky',
+    icon: SiBluesky,
   },
 } as const
 
