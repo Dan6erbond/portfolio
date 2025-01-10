@@ -13,6 +13,7 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 import { Separator } from '../../../components/ui/separator'
 import { Tag } from '../../../components/ui/tag'
+import { X } from 'lucide-react'
 import { blog_posts_tags } from '../../../payload-generated-schema'
 import { cn } from '../../../lib/utils'
 import { getPayload } from '../../../api/payload'
@@ -113,15 +114,28 @@ export default async function Blog({
       <div
         className={cn('flex', 'gap-2', 'justify-center', 'flex-wrap', 'max-w-6xl', 'self-center')}
       >
-        {tags.map(({ tag }) => (
+        {searchTags.map((tag) => (
           <Tag key={tag} asChild>
             <Link
-              href={`?${new URLSearchParams({ ...sp, tags: [...searchTags, tag].join(',') }).toString()}`}
+              href={`?${new URLSearchParams({ ...Object.fromEntries(Object.entries(sp).filter(([key]) => key !== 'tags')), ...(searchTags.filter((t) => t !== tag).length > 0 ? { tags: searchTags.filter((t) => t !== tag).join(',') } : {}) }).toString()}`}
+              className={cn('flex', 'gap-2')}
             >
               {tag}
+              <X />
             </Link>
           </Tag>
         ))}
+        {tags
+          .filter(({ tag }) => !searchTags.includes(tag))
+          .map(({ tag }) => (
+            <Tag key={tag} asChild>
+              <Link
+                href={`?${new URLSearchParams({ ...sp, tags: [...searchTags, tag].join(',') }).toString()}`}
+              >
+                {tag}
+              </Link>
+            </Tag>
+          ))}
       </div>
       <div className={cn('flex', 'flex-col', 'gap-4')}>
         {blogPosts.docs.map((bp, idx) => (
