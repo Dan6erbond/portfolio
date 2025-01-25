@@ -7,6 +7,7 @@ import { Suspense } from 'react'
 import { Tag } from '../../components/ui/tag'
 import { unstable_cacheTag as cacheTag } from 'next/cache'
 import { cn } from '../../lib/utils'
+import { getBlogPosts } from '../../api/blog'
 import { getPayload } from '../../api/payload'
 
 async function getLatestExperiences() {
@@ -42,29 +43,11 @@ async function getLatestProjects() {
   })
 }
 
-async function getLatestBlogPosts() {
-  'use cache'
-  cacheTag('blog-posts')
-
-  return await (
-    await getPayload()
-  ).find({
-    collection: 'blog-posts',
-    limit: 5,
-    sort: '-createdAt',
-    where: {
-      _status: {
-        equals: 'published',
-      },
-    },
-  })
-}
-
 async function Home() {
   const experiences = getLatestExperiences()
   const about = await getAbout()
   const projects = await getLatestProjects()
-  const blogPosts = await getLatestBlogPosts()
+  const blogPosts = await getBlogPosts({})
 
   return (
     <div className={cn('container', 'mx-auto', 'flex', 'flex-col', 'gap-24')}>

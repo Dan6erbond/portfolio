@@ -8,10 +8,10 @@ import {
 } from '../../../../components/ui/breadcrumb'
 
 import { Metadata } from 'next'
-import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from 'next/cache'
 import { draftMode } from 'next/headers'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { getBlogPost } from '../../../../api/blog'
 import { getPayload } from '../../../../api/payload'
 import RichText from '../../../../components/ui/rich-text'
 import ScrollProgress from '../../../../components/ui/scroll-progress'
@@ -19,33 +19,6 @@ import { Tag } from '../../../../components/ui/tag'
 import { cn } from '../../../../lib/utils'
 import { RefreshRouteOnSave } from './refresh'
 import Stats from './stats'
-
-async function getBlogPost(slug: string, draft?: boolean) {
-  'use cache'
-  cacheTag(slug)
-
-  if (draft) {
-    cacheLife('seconds')
-  }
-
-  const blogPosts = await (
-    await getPayload()
-  ).find({
-    collection: 'blog-posts',
-    where: {
-      slug: {
-        equals: slug,
-      },
-    },
-    draft,
-  })
-
-  if (blogPosts.docs.length === 0) {
-    return null
-  }
-
-  return blogPosts.docs[0]
-}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { isEnabled } = await draftMode()

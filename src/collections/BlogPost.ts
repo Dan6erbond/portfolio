@@ -1,4 +1,5 @@
 import { CollectionConfig } from 'payload'
+import type { BlogPost as TBlogPost } from '../payload-types'
 import { revalidateTag } from 'next/cache'
 import slugify from 'slugify'
 
@@ -14,9 +15,17 @@ export const BlogPost: CollectionConfig = {
   },
   hooks: {
     afterChange: [
-      ({ doc }) => {
+      ({ doc, previousDoc }: { doc: TBlogPost; previousDoc: TBlogPost }) => {
         revalidateTag('blog-posts')
         revalidateTag(doc.slug)
+
+        if (
+          doc.tags?.length &&
+          previousDoc.tags?.length &&
+          doc.tags.length > previousDoc.tags.length
+        ) {
+          revalidateTag('blog-tags')
+        }
       },
     ],
     afterDelete: [

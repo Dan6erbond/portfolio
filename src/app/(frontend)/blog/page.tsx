@@ -6,7 +6,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '../../../components/ui/pagination'
-import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from 'next/cache'
+import { getBlogPosts, getBlogTags } from '../../../api/blog'
 
 import { Input } from '../../../components/ui/input'
 import Link from 'next/link'
@@ -14,68 +14,9 @@ import { Metadata } from 'next'
 import { Separator } from '../../../components/ui/separator'
 import { Tag } from '../../../components/ui/tag'
 import { X } from 'lucide-react'
-import { blog_posts_tags } from '../../../payload-generated-schema'
 import { cn } from '../../../lib/utils'
-import { getPayload } from '../../../api/payload'
 
 export const metadata: Metadata = { title: 'Blog', description: 'Read my latest blog posts' }
-
-async function getBlogPosts({
-  searchTags,
-  query,
-  page,
-}: {
-  searchTags?: string[]
-  query?: string
-  page?: number
-}) {
-  'use cache'
-  cacheTag('blog-posts')
-
-  return await (
-    await getPayload()
-  ).find({
-    collection: 'blog-posts',
-    limit: 5,
-    sort: '-createdAt',
-    where: {
-      'tags.tag': {
-        in: searchTags,
-      },
-      or: query
-        ? [
-            {
-              title: {
-                like: query,
-              },
-            },
-            {
-              summary: {
-                like: query,
-              },
-            },
-          ]
-        : [],
-      and: [
-        {
-          _status: {
-            equals: 'published',
-          },
-        },
-      ],
-    },
-    page,
-  })
-}
-
-async function getBlogTags() {
-  'use cache'
-  cacheLife('seconds')
-
-  return await (await getPayload()).db.drizzle
-    .selectDistinct({ tag: blog_posts_tags.tag })
-    .from(blog_posts_tags)
-}
 
 export default async function Blog({
   searchParams,
