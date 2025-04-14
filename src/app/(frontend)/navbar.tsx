@@ -7,19 +7,19 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from '../../components/ui/drawer'
-import { Popover, PopoverContent } from '../../components/ui/popover'
+} from '@/components/ui/drawer'
+import { Popover, PopoverContent } from '@/components/ui/popover'
 import { Suspense, use, useState } from 'react'
 
-import { Button } from '../../components/ui/button'
-import { Contact } from '../../payload-types'
+import { Button } from '@/components/ui/button'
+import { Contact } from '@/payload-types'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Menu } from 'lucide-react'
 import { PopoverTrigger } from '@radix-ui/react-popover'
-import { Skeleton } from '../../components/ui/skeleton'
-import { cn } from '../../lib/utils'
-import { linkTypes } from '../../globals/Contact'
+import { Skeleton } from '@/components/ui/skeleton'
+import { cn } from '@/lib/utils'
+import { linkTypes } from '@/globals/contactLinkTypes'
 
 type NavbarProps = {
   contactPromise: Promise<Contact>
