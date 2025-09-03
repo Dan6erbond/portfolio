@@ -67,7 +67,7 @@ export default async function Blog({
           </Tag>
         ))}
         {tags
-          .filter(({ tag }) => !searchTags.includes(tag))
+          .filter(({ tag }) => !searchTags.includes(tag!))
           .map(({ tag }) => (
             <Tag key={tag} asChild>
               <Link
