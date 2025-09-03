@@ -49,9 +49,13 @@ export async function getBlogPosts({
     limit: 5,
     sort: '-createdAt',
     where: {
-      'tags.tag': {
-        in: searchTags,
-      },
+      ...(searchTags?.length
+        ? {
+            'tags.tag': {
+              in: searchTags,
+            },
+          }
+        : {}),
       or: query
         ? [
             {
