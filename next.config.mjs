@@ -3,7 +3,7 @@ import { withPayload } from '@payloadcms/next/withPayload'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    dynamicIO: false,
+    cacheComponents: false,
     useCache: true,
     reactCompiler: false,
   },
