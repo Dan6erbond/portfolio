@@ -35,6 +35,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const about = await getAbout()
 
   return {
+    metadataBase: new URL(
+      process.env.URL || process.env.PUBLIC_URL || `http://localhost:${process.env.PORT ?? 3000}`,
+    ),
     title: 'RaviAnand Mohabir',
     description: about.summary,
   }
