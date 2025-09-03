@@ -12,7 +12,7 @@ export const codeFields: Field[] = [
   {
     admin: {
       components: {
-        Field: '../components/payload/CodeBlockField#CodeBlockField',
+        Field: '@/components/payload/CodeBlockField#CodeBlockField',
       },
     },
     name: 'code',
