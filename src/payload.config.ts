@@ -53,6 +53,7 @@ export default buildConfig({
       ],
     },
   },
+  blocks: [Code, CodeTabs],
   globals: [About, Contact],
   collections: [Users, Media, Experience, Project, BlogPost],
   editor: lexicalEditor({
