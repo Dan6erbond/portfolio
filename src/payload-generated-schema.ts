@@ -6,26 +6,59 @@
  * and re-run `payload generate:db-schema` to regenerate this file.
  */
 
+import type {} from '@payloadcms/db-postgres'
 import {
   pgTable,
   index,
   uniqueIndex,
   foreignKey,
-  serial,
-  timestamp,
-  varchar,
-  numeric,
   integer,
+  varchar,
+  timestamp,
+  serial,
+  numeric,
   jsonb,
+  boolean,
   pgEnum,
 } from '@payloadcms/db-postgres/drizzle/pg-core'
 import { sql, relations } from '@payloadcms/db-postgres/drizzle'
+export const enum_blog_posts_status = pgEnum('enum_blog_posts_status', ['draft', 'published'])
+export const enum__blog_posts_v_version_status = pgEnum('enum__blog_posts_v_version_status', [
+  'draft',
+  'published',
+])
 export const enum_contact_links_type = pgEnum('enum_contact_links_type', [
   'linkedin',
   'reddit',
   'gitea',
   'github',
+  'email',
+  'bluesky',
 ])
+
+export const users_sessions = pgTable(
+  'users_sessions',
+  {
+    _order: integer('_order').notNull(),
+    _parentID: integer('_parent_id').notNull(),
+    id: varchar('id').primaryKey(),
+    createdAt: timestamp('created_at', { mode: 'string', withTimezone: true, precision: 3 }),
+    expiresAt: timestamp('expires_at', {
+      mode: 'string',
+      withTimezone: true,
+      precision: 3,
+    }).notNull(),
+  },
+  (columns) => ({
+    _orderIdx: index('users_sessions_order_idx').on(columns._order),
+    _parentIDIdx: index('users_sessions_parent_id_idx').on(columns._parentID),
+    _parentIDFk: foreignKey({
+      columns: [columns['_parentID']],
+      foreignColumns: [users.id],
+      name: 'users_sessions_parent_id_fk',
+    }).onDelete('cascade'),
+  }),
+)
 
 export const users = pgTable(
   'users',
@@ -172,7 +205,7 @@ export const blog_posts_tags = pgTable(
     _order: integer('_order').notNull(),
     _parentID: integer('_parent_id').notNull(),
     id: varchar('id').primaryKey(),
-    tag: varchar('tag').notNull(),
+    tag: varchar('tag'),
   },
   (columns) => ({
     _orderIdx: index('blog_posts_tags_order_idx').on(columns._order),
@@ -190,6 +223,7 @@ export const blog_posts = pgTable(
   {
     id: serial('id').primaryKey(),
     title: varchar('title'),
+    slug: varchar('slug'),
     summary: varchar('summary'),
     text: jsonb('text'),
     updatedAt: timestamp('updated_at', { mode: 'string', withTimezone: true, precision: 3 })
@@ -198,10 +232,83 @@ export const blog_posts = pgTable(
     createdAt: timestamp('created_at', { mode: 'string', withTimezone: true, precision: 3 })
       .defaultNow()
       .notNull(),
+    _status: enum_blog_posts_status('_status').default('draft'),
   },
   (columns) => ({
+    blog_posts_slug_idx: uniqueIndex('blog_posts_slug_idx').on(columns.slug),
     blog_posts_updated_at_idx: index('blog_posts_updated_at_idx').on(columns.updatedAt),
     blog_posts_created_at_idx: index('blog_posts_created_at_idx').on(columns.createdAt),
+    blog_posts__status_idx: index('blog_posts__status_idx').on(columns._status),
+  }),
+)
+
+export const _blog_posts_v_version_tags = pgTable(
+  '_blog_posts_v_version_tags',
+  {
+    _order: integer('_order').notNull(),
+    _parentID: integer('_parent_id').notNull(),
+    id: serial('id').primaryKey(),
+    tag: varchar('tag'),
+    _uuid: varchar('_uuid'),
+  },
+  (columns) => ({
+    _orderIdx: index('_blog_posts_v_version_tags_order_idx').on(columns._order),
+    _parentIDIdx: index('_blog_posts_v_version_tags_parent_id_idx').on(columns._parentID),
+    _parentIDFk: foreignKey({
+      columns: [columns['_parentID']],
+      foreignColumns: [_blog_posts_v.id],
+      name: '_blog_posts_v_version_tags_parent_id_fk',
+    }).onDelete('cascade'),
+  }),
+)
+
+export const _blog_posts_v = pgTable(
+  '_blog_posts_v',
+  {
+    id: serial('id').primaryKey(),
+    parent: integer('parent_id').references(() => blog_posts.id, {
+      onDelete: 'set null',
+    }),
+    version_title: varchar('version_title'),
+    version_slug: varchar('version_slug'),
+    version_summary: varchar('version_summary'),
+    version_text: jsonb('version_text'),
+    version_updatedAt: timestamp('version_updated_at', {
+      mode: 'string',
+      withTimezone: true,
+      precision: 3,
+    }),
+    version_createdAt: timestamp('version_created_at', {
+      mode: 'string',
+      withTimezone: true,
+      precision: 3,
+    }),
+    version__status: enum__blog_posts_v_version_status('version__status').default('draft'),
+    createdAt: timestamp('created_at', { mode: 'string', withTimezone: true, precision: 3 })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp('updated_at', { mode: 'string', withTimezone: true, precision: 3 })
+      .defaultNow()
+      .notNull(),
+    latest: boolean('latest'),
+  },
+  (columns) => ({
+    _blog_posts_v_parent_idx: index('_blog_posts_v_parent_idx').on(columns.parent),
+    _blog_posts_v_version_version_slug_idx: index('_blog_posts_v_version_version_slug_idx').on(
+      columns.version_slug,
+    ),
+    _blog_posts_v_version_version_updated_at_idx: index(
+      '_blog_posts_v_version_version_updated_at_idx',
+    ).on(columns.version_updatedAt),
+    _blog_posts_v_version_version_created_at_idx: index(
+      '_blog_posts_v_version_version_created_at_idx',
+    ).on(columns.version_createdAt),
+    _blog_posts_v_version_version__status_idx: index(
+      '_blog_posts_v_version_version__status_idx',
+    ).on(columns.version__status),
+    _blog_posts_v_created_at_idx: index('_blog_posts_v_created_at_idx').on(columns.createdAt),
+    _blog_posts_v_updated_at_idx: index('_blog_posts_v_updated_at_idx').on(columns.updatedAt),
+    _blog_posts_v_latest_idx: index('_blog_posts_v_latest_idx').on(columns.latest),
   }),
 )
 
@@ -371,6 +478,14 @@ export const payload_migrations = pgTable(
   }),
 )
 
+export const about = pgTable('about', {
+  id: serial('id').primaryKey(),
+  summary: varchar('summary'),
+  text: jsonb('text'),
+  updatedAt: timestamp('updated_at', { mode: 'string', withTimezone: true, precision: 3 }),
+  createdAt: timestamp('created_at', { mode: 'string', withTimezone: true, precision: 3 }),
+})
+
 export const contact_links = pgTable(
   'contact_links',
   {
@@ -393,12 +508,22 @@ export const contact_links = pgTable(
 
 export const contact = pgTable('contact', {
   id: serial('id').primaryKey(),
-  about: jsonb('about'),
   updatedAt: timestamp('updated_at', { mode: 'string', withTimezone: true, precision: 3 }),
   createdAt: timestamp('created_at', { mode: 'string', withTimezone: true, precision: 3 }),
 })
 
-export const relations_users = relations(users, () => ({}))
+export const relations_users_sessions = relations(users_sessions, ({ one }) => ({
+  _parentID: one(users, {
+    fields: [users_sessions._parentID],
+    references: [users.id],
+    relationName: 'sessions',
+  }),
+}))
+export const relations_users = relations(users, ({ many }) => ({
+  sessions: many(users_sessions, {
+    relationName: 'sessions',
+  }),
+}))
 export const relations_media = relations(media, () => ({}))
 export const relations_experiences_tags = relations(experiences_tags, ({ one }) => ({
   _parentID: one(experiences, {
@@ -434,6 +559,26 @@ export const relations_blog_posts_tags = relations(blog_posts_tags, ({ one }) =>
 export const relations_blog_posts = relations(blog_posts, ({ many }) => ({
   tags: many(blog_posts_tags, {
     relationName: 'tags',
+  }),
+}))
+export const relations__blog_posts_v_version_tags = relations(
+  _blog_posts_v_version_tags,
+  ({ one }) => ({
+    _parentID: one(_blog_posts_v, {
+      fields: [_blog_posts_v_version_tags._parentID],
+      references: [_blog_posts_v.id],
+      relationName: 'version_tags',
+    }),
+  }),
+)
+export const relations__blog_posts_v = relations(_blog_posts_v, ({ one, many }) => ({
+  parent: one(blog_posts, {
+    fields: [_blog_posts_v.parent],
+    references: [blog_posts.id],
+    relationName: 'parent',
+  }),
+  version_tags: many(_blog_posts_v_version_tags, {
+    relationName: 'version_tags',
   }),
 }))
 export const relations_payload_locked_documents_rels = relations(
@@ -500,6 +645,7 @@ export const relations_payload_preferences = relations(payload_preferences, ({ m
   }),
 }))
 export const relations_payload_migrations = relations(payload_migrations, () => ({}))
+export const relations_about = relations(about, () => ({}))
 export const relations_contact_links = relations(contact_links, ({ one }) => ({
   _parentID: one(contact, {
     fields: [contact_links._parentID],
@@ -514,7 +660,10 @@ export const relations_contact = relations(contact, ({ many }) => ({
 }))
 
 type DatabaseSchema = {
+  enum_blog_posts_status: typeof enum_blog_posts_status
+  enum__blog_posts_v_version_status: typeof enum__blog_posts_v_version_status
   enum_contact_links_type: typeof enum_contact_links_type
+  users_sessions: typeof users_sessions
   users: typeof users
   media: typeof media
   experiences_tags: typeof experiences_tags
@@ -523,13 +672,17 @@ type DatabaseSchema = {
   projects: typeof projects
   blog_posts_tags: typeof blog_posts_tags
   blog_posts: typeof blog_posts
+  _blog_posts_v_version_tags: typeof _blog_posts_v_version_tags
+  _blog_posts_v: typeof _blog_posts_v
   payload_locked_documents: typeof payload_locked_documents
   payload_locked_documents_rels: typeof payload_locked_documents_rels
   payload_preferences: typeof payload_preferences
   payload_preferences_rels: typeof payload_preferences_rels
   payload_migrations: typeof payload_migrations
+  about: typeof about
   contact_links: typeof contact_links
   contact: typeof contact
+  relations_users_sessions: typeof relations_users_sessions
   relations_users: typeof relations_users
   relations_media: typeof relations_media
   relations_experiences_tags: typeof relations_experiences_tags
@@ -538,16 +691,19 @@ type DatabaseSchema = {
   relations_projects: typeof relations_projects
   relations_blog_posts_tags: typeof relations_blog_posts_tags
   relations_blog_posts: typeof relations_blog_posts
+  relations__blog_posts_v_version_tags: typeof relations__blog_posts_v_version_tags
+  relations__blog_posts_v: typeof relations__blog_posts_v
   relations_payload_locked_documents_rels: typeof relations_payload_locked_documents_rels
   relations_payload_locked_documents: typeof relations_payload_locked_documents
   relations_payload_preferences_rels: typeof relations_payload_preferences_rels
   relations_payload_preferences: typeof relations_payload_preferences
   relations_payload_migrations: typeof relations_payload_migrations
+  relations_about: typeof relations_about
   relations_contact_links: typeof relations_contact_links
   relations_contact: typeof relations_contact
 }
 
-declare module '@payloadcms/db-postgres/types' {
+declare module '@payloadcms/db-postgres' {
   export interface GeneratedDatabaseSchema {
     schema: DatabaseSchema
   }
