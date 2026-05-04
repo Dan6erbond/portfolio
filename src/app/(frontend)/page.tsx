@@ -1,3 +1,5 @@
+import { cacheLife, cacheTag } from 'next/cache'
+
 import { ChevronRight } from 'lucide-react'
 import { ExperiencesTimeline } from './experiences'
 import Link from 'next/link'
@@ -5,7 +7,6 @@ import { MagicCard } from '../../components/ui/magic-card'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { Suspense } from 'react'
 import { Tag } from '../../components/ui/tag'
-import { cacheTag } from 'next/cache'
 import { cn } from '../../lib/utils'
 import { getBlogPosts } from '../../api/blog'
 import { getPayload } from '../../api/payload'
@@ -13,6 +14,7 @@ import { getPayload } from '../../api/payload'
 async function getLatestExperiences() {
   'use cache'
   cacheTag('experiences')
+  cacheLife('max')
 
   return await (
     await getPayload()
@@ -26,6 +28,7 @@ async function getLatestExperiences() {
 async function getAbout() {
   'use cache'
   cacheTag('about')
+  cacheLife('max')
 
   return await (await getPayload()).findGlobal({ slug: 'about' })
 }
@@ -33,6 +36,7 @@ async function getAbout() {
 async function getLatestProjects() {
   'use cache'
   cacheTag('projects')
+  cacheLife('max')
 
   return await (
     await getPayload()

@@ -6,6 +6,7 @@ import { getPayload } from './payload'
 export async function getBlogPost(slug: string, draft?: boolean) {
   'use cache'
   cacheTag(slug)
+  cacheLife('max')
 
   if (draft) {
     cacheLife('seconds')
@@ -43,6 +44,7 @@ export async function getBlogPosts({
 }) {
   'use cache'
   cacheTag('blog-posts')
+  cacheLife('max')
 
   return await (
     await getPayload()
@@ -88,6 +90,7 @@ export async function getBlogPosts({
 export async function getBlogTags() {
   'use cache'
   cacheTag('blog-tags')
+  cacheLife('max')
 
   return await (await getPayload()).db.drizzle
     .selectDistinct({ tag: blog_posts_tags.tag })

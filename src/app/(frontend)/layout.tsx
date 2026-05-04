@@ -1,6 +1,7 @@
 import './global.css'
 
 import { Metadata, Viewport } from 'next'
+import { cacheLife, cacheTag } from 'next/cache'
 
 import DayJs from './dayjs'
 import Footer from './footer'
@@ -9,7 +10,6 @@ import LogoGrid from './logo-grid'
 import Navbar from './navbar'
 import { ReactNode } from 'react'
 import Script from 'next/script'
-import { cacheTag } from 'next/cache'
 import { cn } from '../../lib/utils'
 import { getPayload } from '../../api/payload'
 
@@ -22,6 +22,7 @@ const inter = Inter({
 async function getAbout() {
   'use cache'
   cacheTag('about')
+  cacheLife('max')
 
   return await (await getPayload()).findGlobal({ slug: 'about' })
 }
@@ -46,6 +47,7 @@ export async function generateMetadata(): Promise<Metadata> {
 async function getContact() {
   'use cache'
   cacheTag('contact')
+  cacheLife('max')
 
   return await (await getPayload()).findGlobal({ slug: 'contact' })
 }
