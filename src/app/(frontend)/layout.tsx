@@ -56,7 +56,11 @@ export default async function Layout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={cn('dark', inter.variable)}>
       {process.env.UMAMI_WEBSITE_ID && (
-        <Script defer src={process.env.UMAMI_JS} data-website-id={process.env.UMAMI_WEBSITE_ID} />
+        <Script
+          defer
+          src={process.env.UMAMI_JS ?? 'https://cloud.umami.is/script.js'}
+          data-website-id={process.env.UMAMI_WEBSITE_ID}
+        />
       )}
       <DayJs />
       <body>
