@@ -3,7 +3,11 @@ import type { CollectionConfig } from 'payload'
 export const Media: CollectionConfig = {
   slug: 'media',
   access: {
-    read: () => true,
+    read: ({ req: { user, pathname } }) => {
+      if (!user && pathname.split('/').length < 4) return false
+
+      return true
+    },
   },
   fields: [
     {
