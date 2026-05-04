@@ -10,7 +10,7 @@ export const Contact: GlobalConfig = {
   hooks: {
     afterChange: [
       ({}) => {
-        revalidateTag('contact')
+        revalidateTag('contact', 'max')
       },
     ],
   },

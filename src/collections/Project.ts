@@ -9,12 +9,12 @@ export const Project: CollectionConfig = {
   hooks: {
     afterChange: [
       ({}) => {
-        revalidateTag('projects')
+        revalidateTag('projects', 'max')
       },
     ],
     afterDelete: [
       ({}) => {
-        revalidateTag('projects')
+        revalidateTag('projects', 'max')
       },
     ],
   },

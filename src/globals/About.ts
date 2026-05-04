@@ -9,7 +9,7 @@ export const About: GlobalConfig = {
   hooks: {
     afterChange: [
       ({}) => {
-        revalidateTag('about')
+        revalidateTag('about', 'max')
       },
     ],
   },

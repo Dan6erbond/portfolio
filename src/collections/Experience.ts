@@ -9,12 +9,12 @@ export const Experience: CollectionConfig = {
   hooks: {
     afterChange: [
       ({}) => {
-        revalidateTag('experiences')
+        revalidateTag('experiences', 'max')
       },
     ],
     afterDelete: [
       ({}) => {
-        revalidateTag('experiences')
+        revalidateTag('experiences', 'max')
       },
     ],
   },

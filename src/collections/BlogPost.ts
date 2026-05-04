@@ -16,22 +16,22 @@ export const BlogPost: CollectionConfig = {
   hooks: {
     afterChange: [
       ({ doc, previousDoc }: { doc: TBlogPost; previousDoc: TBlogPost }) => {
-        revalidateTag('blog-posts')
-        revalidateTag(doc.slug)
+        revalidateTag('blog-posts', 'max')
+        revalidateTag(doc.slug, 'max')
 
         if (
           doc.tags?.length &&
           previousDoc.tags?.length &&
           doc.tags.length > previousDoc.tags.length
         ) {
-          revalidateTag('blog-tags')
+          revalidateTag('blog-tags', 'max')
         }
       },
     ],
     afterDelete: [
       ({ doc }) => {
-        revalidateTag('blog-posts')
-        revalidateTag(doc.slug)
+        revalidateTag('blog-posts', 'max')
+        revalidateTag(doc.slug, 'max')
       },
     ],
   },
