@@ -1,4 +1,4 @@
-import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from 'next/cache'
+import { cacheLife, cacheTag } from 'next/cache'
 
 import { blog_posts_tags } from '../payload-generated-schema'
 import { getPayload } from './payload'

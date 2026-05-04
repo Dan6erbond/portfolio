@@ -9,7 +9,7 @@ import LogoGrid from './logo-grid'
 import Navbar from './navbar'
 import { ReactNode } from 'react'
 import Script from 'next/script'
-import { unstable_cacheTag as cacheTag } from 'next/cache'
+import { cacheTag } from 'next/cache'
 import { cn } from '../../lib/utils'
 import { getPayload } from '../../api/payload'
 
