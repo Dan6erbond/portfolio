@@ -11,8 +11,7 @@ import { Metadata } from 'next'
 import { draftMode } from 'next/headers'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getBlogPost } from '../../../../api/blog'
-import { getPayload } from '../../../../api/payload'
+import { getBlogPost, getBlogPosts } from '../../../../api/blog'
 import RichText from '../../../../components/ui/rich-text'
 import ScrollProgress from '../../../../components/ui/scroll-progress'
 import { Tag } from '../../../../components/ui/tag'
@@ -75,12 +74,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
 }
 
 export async function generateStaticParams() {
-  const blogPosts = await (
-    await getPayload()
-  ).find({
-    collection: 'blog-posts',
-    pagination: false,
-  })
+  const blogPosts = await getBlogPosts({ pagination: false })
 
   return blogPosts.docs.map((bp) => ({
     slug: bp.slug,
