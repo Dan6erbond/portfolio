@@ -3,9 +3,6 @@ import { revalidateTag } from 'next/cache'
 
 export const Project: CollectionConfig = {
   slug: 'projects',
-  access: {
-    read: () => true,
-  },
   hooks: {
     afterChange: [
       ({}) => {

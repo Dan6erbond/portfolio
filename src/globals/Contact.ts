@@ -4,9 +4,6 @@ import { revalidateTag } from 'next/cache'
 
 export const Contact: GlobalConfig = {
   slug: 'contact',
-  access: {
-    read: () => true,
-  },
   hooks: {
     afterChange: [
       ({}) => {

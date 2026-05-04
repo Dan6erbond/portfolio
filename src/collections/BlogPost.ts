@@ -5,9 +5,6 @@ import slugify from 'slugify'
 
 export const BlogPost: CollectionConfig = {
   slug: 'blog-posts',
-  access: {
-    read: () => true,
-  },
   versions: {
     drafts: {
       validate: true,

@@ -3,9 +3,6 @@ import { revalidateTag } from 'next/cache'
 
 export const Experience: CollectionConfig = {
   slug: 'experiences',
-  access: {
-    read: () => true,
-  },
   hooks: {
     afterChange: [
       ({}) => {
