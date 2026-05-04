@@ -34,10 +34,12 @@ export async function getBlogPosts({
   searchTags,
   query,
   page,
+  pagination,
 }: {
   searchTags?: string[]
   query?: string
   page?: number
+  pagination?: boolean
 }) {
   'use cache'
   cacheTag('blog-posts')
@@ -79,6 +81,7 @@ export async function getBlogPosts({
       ],
     },
     page,
+    pagination,
   })
 }
 

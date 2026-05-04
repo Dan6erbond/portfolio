@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 
+import { getBlogPost, getBlogPosts } from '../../../../api/blog'
+
 import { ImageResponse } from 'next/og'
 import { cn } from '../../../../lib/utils'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
-import { getPayload } from '../../../../api/payload'
 import { join } from 'node:path'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { readFile } from 'node:fs/promises'
@@ -26,25 +27,6 @@ export const size = {
 }
 
 export const contentType = 'image/png'
-
-async function getBlogPost(slug: string) {
-  const blogPosts = await (
-    await getPayload()
-  ).find({
-    collection: 'blog-posts',
-    where: {
-      slug: {
-        equals: slug,
-      },
-    },
-  })
-
-  if (blogPosts.docs.length === 0) {
-    return null
-  }
-
-  return blogPosts.docs[0]
-}
 
 function appendText(
   text: string,
@@ -200,12 +182,7 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
 }
 
 export async function generateStaticParams() {
-  const blogPosts = await (
-    await getPayload()
-  ).find({
-    collection: 'blog-posts',
-    pagination: false,
-  })
+  const blogPosts = await getBlogPosts({ pagination: false })
 
   return blogPosts.docs.map((bp) => ({
     slug: bp.slug,
