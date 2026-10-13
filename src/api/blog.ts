@@ -1,6 +1,5 @@
 import { cacheLife, cacheTag } from 'next/cache'
 
-import { blog_posts_tags } from '../payload-generated-schema'
 import { getPayload } from './payload'
 
 export async function getBlogPost(slug: string, draft?: boolean) {
@@ -31,27 +30,34 @@ export async function getBlogPost(slug: string, draft?: boolean) {
   return blogPosts.docs[0]
 }
 
-export async function getBlogPosts({
-  searchTags,
-  query,
-  page,
-  pagination,
-}: {
+type BlogPostsArgs = {
   searchTags?: string[]
   query?: string
   page?: number
   pagination?: boolean
-}) {
+}
+
+export async function getBlogPosts(args: BlogPostsArgs) {
+  return args.query ? findBlogPosts(args) : getCachedBlogPosts(args)
+}
+
+async function getCachedBlogPosts(args: BlogPostsArgs) {
   'use cache'
   cacheTag('blog-posts')
   cacheLife('max')
 
+  return await findBlogPosts(args)
+}
+
+async function findBlogPosts({ searchTags, query, page, pagination }: BlogPostsArgs) {
   return await (
     await getPayload()
   ).find({
     collection: 'blog-posts',
     limit: 5,
     sort: '-createdAt',
+    depth: 0,
+    select: { title: true, slug: true, summary: true, tags: true },
     where: {
       ...(searchTags?.length
         ? {
@@ -92,7 +98,8 @@ export async function getBlogTags() {
   cacheTag('blog-tags')
   cacheLife('max')
 
-  return await (await getPayload()).db.drizzle
-    .selectDistinct({ tag: blog_posts_tags.tag })
-    .from(blog_posts_tags)
+  const { db } = await getPayload()
+  const blogPostsTags = db.tables.blog_posts_tags
+
+  return await db.drizzle.selectDistinct({ tag: blogPostsTags.tag }).from(blogPostsTags)
 }
