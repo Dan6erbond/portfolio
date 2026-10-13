@@ -21,5 +21,5 @@ export async function GET(request: Request) {
   const draft = await draftMode()
   draft.enable()
 
-  redirect(`/blog/${blogPost.slug}`)
+  redirect(`/preview/blog/${blogPost.slug}`)
 }
