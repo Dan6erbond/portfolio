@@ -44,3 +44,6 @@ next-env.d.ts
 
 # local sqlite dev database
 /dev.db*
+
+# local notes
+/docs/
