@@ -20,6 +20,10 @@ export const BlogPost: CollectionConfig = {
         revalidateTag('blog-posts', 'max')
         revalidateTag(doc.slug, 'max')
 
+        if (previousDoc?.slug && previousDoc.slug !== doc.slug) {
+          revalidateTag(previousDoc.slug, 'max')
+        }
+
         if (
           doc.tags?.length &&
           previousDoc.tags?.length &&

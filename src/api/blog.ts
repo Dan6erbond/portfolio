@@ -30,6 +30,12 @@ export async function getBlogPost(slug: string, draft?: boolean) {
   return blogPosts.docs[0]
 }
 
+export async function getBlogSlugs() {
+  const blogPosts = await getBlogPosts({ pagination: false })
+
+  return blogPosts.docs.map((bp) => bp.slug)
+}
+
 type BlogPostsArgs = {
   searchTags?: string[]
   query?: string
