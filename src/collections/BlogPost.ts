@@ -2,9 +2,11 @@ import { CollectionConfig } from 'payload'
 import type { BlogPost as TBlogPost } from '../payload-types'
 import { revalidateTag } from 'next/cache'
 import slugify from 'slugify'
+import { loggedInOnlyAccess } from '../access/isLoggedIn'
 
 export const BlogPost: CollectionConfig = {
   slug: 'blog-posts',
+  access: loggedInOnlyAccess,
   versions: {
     drafts: {
       validate: true,

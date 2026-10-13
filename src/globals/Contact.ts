@@ -1,9 +1,11 @@
 import { GlobalConfig } from 'payload'
 import { linkTypes } from './contactLinkTypes'
 import { revalidateTag } from 'next/cache'
+import { loggedInOnlyGlobalAccess } from '../access/isLoggedIn'
 
 export const Contact: GlobalConfig = {
   slug: 'contact',
+  access: loggedInOnlyGlobalAccess,
   hooks: {
     afterChange: [
       ({}) => {

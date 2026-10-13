@@ -56,6 +56,7 @@ export default buildConfig({
   blocks: [Code, CodeTabs],
   globals: [About, Contact],
   collections: [Users, Media, Experience, Project, BlogPost],
+  graphQL: { disable: process.env.NODE_ENV !== 'development' },
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,

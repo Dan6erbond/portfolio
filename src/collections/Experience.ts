@@ -1,8 +1,10 @@
 import { CollectionConfig } from 'payload'
 import { revalidateTag } from 'next/cache'
+import { loggedInOnlyAccess } from '../access/isLoggedIn'
 
 export const Experience: CollectionConfig = {
   slug: 'experiences',
+  access: loggedInOnlyAccess,
   hooks: {
     afterChange: [
       ({}) => {
