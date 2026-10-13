@@ -1,26 +1,14 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getBlogPost, getBlogSlugs } from '../../../../api/blog'
+import { getBlogPost, getBlogPosts } from '../../../../api/blog'
 import { BlogPostContent } from './post'
 
-async function getPublishedBlogPost(params: Promise<{ slug: string }>) {
-  const { slug } = await params
-
-  if (!(await getBlogSlugs()).includes(slug)) {
-    notFound()
-  }
-
-  const blogPost = await getBlogPost(slug)
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const blogPost = await getBlogPost((await params).slug)
 
   if (!blogPost) {
     notFound()
   }
-
-  return blogPost
-}
-
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const blogPost = await getPublishedBlogPost(params)
 
   return {
     title: blogPost.title,
@@ -29,9 +17,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
-  return <BlogPostContent blogPost={await getPublishedBlogPost(params)} />
+  const blogPost = await getBlogPost((await params).slug)
+
+  if (!blogPost) {
+    notFound()
+  }
+
+  return <BlogPostContent blogPost={blogPost} />
 }
 
 export async function generateStaticParams() {
-  return (await getBlogSlugs()).map((slug) => ({ slug }))
+  const blogPosts = await getBlogPosts({ pagination: false })
+
+  return blogPosts.docs.map((bp) => ({
+    slug: bp.slug,
+  }))
 }

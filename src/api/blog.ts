@@ -24,16 +24,11 @@ export async function getBlogPost(slug: string, draft?: boolean) {
   })
 
   if (blogPosts.docs.length === 0) {
+    cacheLife('minutes')
     return null
   }
 
   return blogPosts.docs[0]
-}
-
-export async function getBlogSlugs() {
-  const blogPosts = await getBlogPosts({ pagination: false })
-
-  return blogPosts.docs.map((bp) => bp.slug)
 }
 
 type BlogPostsArgs = {
