@@ -14,7 +14,9 @@ export const BlogPost: CollectionConfig = {
   },
   hooks: {
     afterChange: [
-      ({ doc, previousDoc }: { doc: TBlogPost; previousDoc: TBlogPost }) => {
+      ({ doc, previousDoc, context }) => {
+        if (context.skipRevalidate) return
+
         revalidateTag('blog-posts', 'max')
         revalidateTag(doc.slug, 'max')
 

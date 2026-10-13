@@ -14,6 +14,7 @@ import path from 'path'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import sharp from 'sharp'
+import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 
 const filename = fileURLToPath(import.meta.url)
@@ -70,11 +71,16 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  db: postgresAdapter({
-    pool: {
-      connectionString: process.env.POSTGRES_URL || '',
-    },
-  }),
+  db: process.env.POSTGRES_URL
+    ? postgresAdapter({
+        pool: {
+          connectionString: process.env.POSTGRES_URL,
+        },
+      })
+    : sqliteAdapter({
+        client: { url: 'file:./dev.db' },
+        push: true,
+      }),
   sharp,
   plugins: [
     payloadCloudPlugin({}),

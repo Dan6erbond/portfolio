@@ -13,6 +13,7 @@
     "generate:db-schema": "cross-env NODE_OPTIONS=--no-deprecation payload generate:db-schema",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
+    "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed.ts",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start"
   },
   "dependencies": {
@@ -53,6 +54,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
+    "@payloadcms/db-sqlite": "3.84.1",
     "@tailwindcss/typography": "^0.5.15",
     "@types/node": "^22.5.4",
     "@types/react": "19.0.1",
