@@ -7,17 +7,32 @@ import { Contact } from './globals/Contact'
 import { Experience } from './collections/Experience'
 import { Media } from './collections/Media'
 import { Project } from './collections/Project'
+import { isNetlifyBlobsAvailable, netlifyBlobsStorage } from './storage/netlifyBlobs'
 import { Users } from './collections/Users'
-import { buildConfig } from 'payload'
+import { type EmailAdapter, buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import path from 'path'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import sharp from 'sharp'
-import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+// pg warns that sslmode=prefer/require/verify-ca are aliases for verify-full (changing in pg v9).
+// Pin the current behaviour explicitly so the warning is no longer logged on every cold start.
+const normalizePostgresUrl = (url?: string) =>
+  url?.replace(/([?&]sslmode=)(prefer|require|verify-ca)(?=&|$)/, '$1verify-full')
+
+// No email provider is configured; a no-op adapter avoids the "No email adapter provided" warning.
+const noopEmailAdapter: EmailAdapter = ({ payload }) => ({
+  name: 'noop',
+  defaultFromAddress: 'noreply@localhost',
+  defaultFromName: 'Portfolio',
+  sendEmail: async (message) => {
+    payload.logger.info(`Email not sent (no email adapter configured): ${message.subject}`)
+  },
+})
 
 export default buildConfig({
   admin: {
@@ -66,6 +81,7 @@ export default buildConfig({
       }),
     ],
   }),
+  email: noopEmailAdapter,
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
@@ -73,7 +89,7 @@ export default buildConfig({
   db: process.env.POSTGRES_URL
     ? postgresAdapter({
         pool: {
-          connectionString: process.env.POSTGRES_URL,
+          connectionString: normalizePostgresUrl(process.env.POSTGRES_URL),
         },
       })
     : (await import('@payloadcms/db-sqlite')).sqliteAdapter({
@@ -83,14 +99,9 @@ export default buildConfig({
   sharp,
   plugins: [
     payloadCloudPlugin({}),
-    vercelBlobStorage({
-      enabled: process.env.BLOB_READ_WRITE_TOKEN != null,
-      // Specify which collections should use Vercel Blob
-      collections: {
-        media: true,
-      },
-      // Token provided by Vercel once Blob storage is added to your Vercel project
-      token: process.env.BLOB_READ_WRITE_TOKEN,
+    netlifyBlobsStorage({
+      enabled: isNetlifyBlobsAvailable(),
+      collections: { media: true },
     }),
   ],
 })
