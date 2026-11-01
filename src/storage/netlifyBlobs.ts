@@ -75,19 +75,19 @@ const createAdapter =
             return new Response(null, { status: 404, statusText: 'Not Found' })
           }
 
-          const etag = `"${entry.etag}"`
+          const etag = entry.etag ? (entry.etag.startsWith('"') ? entry.etag : `"${entry.etag}"`) : undefined
           const responseHeaders = new Headers(headers)
           responseHeaders.set(
             'Content-Type',
             (entry.metadata.contentType as string | undefined) ?? 'application/octet-stream',
           )
           responseHeaders.set('Cache-Control', `public, max-age=${cacheControlMaxAge}`)
-          responseHeaders.set('ETag', etag)
+          if (etag) responseHeaders.set('ETag', etag)
           if (entry.metadata.contentType === 'image/svg+xml') {
             responseHeaders.set('Content-Security-Policy', "script-src 'none'")
           }
 
-          if (req.headers.get('if-none-match') === etag) {
+          if (etag && req.headers.get('if-none-match') === etag) {
             void entry.data.cancel()
             return new Response(null, { status: 304, headers: responseHeaders })
           }
