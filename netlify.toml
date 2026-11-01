@@ -1,3 +1,13 @@
+# Environment variables (secrets) are NOT set here: add them in the Netlify UI under
+# Site configuration > Environment variables and scope them per deploy context
+# (Production / Deploy Previews / Branch deploys). Required for every context that builds:
+#   POSTGRES_URL        - use a separate Neon branch for Deploy Previews, never the production DB,
+#                         because the build below runs `payload migrate` and `next build` reads content
+#   PAYLOAD_SECRET, DRAFT_MODE_SECRET, NEXT_PUBLIC_PAYLOAD_URL
+# Media is stored in Netlify Blobs (store "media"); no credentials are needed on Netlify itself.
+# Non-secret, context-specific values may be set below, e.g.:
+#   [context.deploy-preview.environment]
+#   NEXT_PUBLIC_PAYLOAD_URL = "https://deploy-preview-1--d6bportfolio.netlify.app"
 [build]
   command = "pnpm payload migrate && pnpm build"
 

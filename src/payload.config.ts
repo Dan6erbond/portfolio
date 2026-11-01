@@ -7,6 +7,7 @@ import { Contact } from './globals/Contact'
 import { Experience } from './collections/Experience'
 import { Media } from './collections/Media'
 import { Project } from './collections/Project'
+import { isNetlifyBlobsAvailable, netlifyBlobsStorage } from './storage/netlifyBlobs'
 import { Users } from './collections/Users'
 import { type EmailAdapter, buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
@@ -14,7 +15,6 @@ import path from 'path'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import sharp from 'sharp'
-import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -99,14 +99,9 @@ export default buildConfig({
   sharp,
   plugins: [
     payloadCloudPlugin({}),
-    vercelBlobStorage({
-      enabled: process.env.BLOB_READ_WRITE_TOKEN != null,
-      // Specify which collections should use Vercel Blob
-      collections: {
-        media: true,
-      },
-      // Token provided by Vercel once Blob storage is added to your Vercel project
-      token: process.env.BLOB_READ_WRITE_TOKEN,
+    netlifyBlobsStorage({
+      enabled: isNetlifyBlobsAvailable(),
+      collections: { media: true },
     }),
   ],
 })
